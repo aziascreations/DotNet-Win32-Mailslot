@@ -5,9 +5,21 @@ using System.ComponentModel;
 using System.IO;
 using System.Runtime.InteropServices;
 
+using static NibblePoker.Win32.Mailslot.MailslotBindings;
+
 namespace NibblePoker.Win32.Mailslot;
 
-public class MailslotServer : Mailslot {
+public class MailslotServer {
+    /// <summary>
+    /// There is no next message.
+    /// </summary>
+    public const int MAILSLOT_NO_MESSAGE = MailslotConstants.MAILSLOT_NO_MESSAGE;
+
+    /// <summary>
+    /// Waits forever for a message.
+    /// </summary>
+    public const int MAILSLOT_WAIT_FOREVER = MailslotConstants.MAILSLOT_WAIT_FOREVER;
+
 
     public string FullPath {
         get;
@@ -15,7 +27,7 @@ public class MailslotServer : Mailslot {
     }
 
     private readonly uint _maxMessageSize;
-    public override uint MaxMessageSize {
+    public uint MaxMessageSize {
         get => _maxMessageSize;
     }
 
@@ -71,34 +83,4 @@ public class MailslotServer : Mailslot {
     public static FileStream CreateAsFileStream(string path, uint maxMessageSize, uint readTimeoutMs, int bufferSize = 4096) {
         return new MailslotServer(path, maxMessageSize, readTimeoutMs).GetFileStream(bufferSize);
     }
-
-
-    #region PInvoke
-
-    [DllImport("kernel32.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Auto, SetLastError = true)]
-    private static extern SafeFileHandle CreateMailslot(
-        [In] string lpName,
-        [In] uint nMaxMessageSize,
-        [In] uint lReadTimeout,
-        [In, Optional] IntPtr lpSecurityAttributes
-    );
-
-    [DllImport("kernel32.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.None, SetLastError = true)]
-    [return: MarshalAs(UnmanagedType.Bool)]
-    private static extern bool GetMailslotInfo(
-        [In] SafeHandle hMailslot,
-        [Out, Optional] out uint? lpMaxMessageSize,
-        [Out, Optional] out uint? lpNextSize,
-        [Out, Optional] out uint? lpMessageCount,
-        [Out, Optional] out uint? lpReadTimeout
-    );
-
-    [DllImport("kernel32.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.None, SetLastError = true)]
-    [return: MarshalAs(UnmanagedType.Bool)]
-    private static extern bool SetMailslotInfo(
-      [In] SafeHandle hMailslot,
-      [In] uint lReadTimeout
-    );
-
-    #endregion
 }

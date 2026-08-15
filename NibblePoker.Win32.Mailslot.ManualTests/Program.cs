@@ -12,7 +12,9 @@ internal static class Program {
         MailslotServer server = new MailslotServer(mailslotPath, 1024, 99999);
 
         MailslotClient clientSync = new MailslotClient(".", mailslotPath, false);
-        clientSync.GetFileStream().Write(Encoding.ASCII.GetBytes(mailslotText));
+        FileStream clientStream = clientSync.GetFileStream();
+        clientStream.Write(Encoding.ASCII.GetBytes(mailslotText));
+        //clientStream.Flush();
         /**/
 
         /*MailslotClient clientAsync = new MailslotClient(".", mailslotPath, true);

@@ -5,24 +5,17 @@ using System.ComponentModel;
 using System.IO;
 using System.Runtime.InteropServices;
 
+using static NibblePoker.Win32.Mailslot.MailslotBindings;
+using static NibblePoker.Win32.Mailslot.MailslotConstants;
+
 namespace NibblePoker.Win32.Mailslot;
 
-public class MailslotClient : Mailslot {
-
-    #region Constants
+public class MailslotClient {
 
     /// <summary>
-    /// ...
+    /// UNC path to which the client is connected.<br/>
+    /// Format: <c>\\{domain}\mailslot\{path}</c>
     /// </summary>
-    public const int FILE_FLAG_NONE = 0;
-
-    /// <summary>
-    /// Waits forever for a message.
-    /// </summary>
-    public const int FILE_FLAG_OVERLAPPED = 0x40000000;
-
-    #endregion
-
     public string FullPath {
         get;
         private set;
@@ -33,7 +26,10 @@ public class MailslotClient : Mailslot {
         private set;
     }
 
-    public override uint MaxMessageSize => throw new NotImplementedException();
+    public bool AutoFlushing {
+        get;
+        private set;
+    }
 
     internal SafeFileHandle MailslotHandle;
 
@@ -59,27 +55,11 @@ public class MailslotClient : Mailslot {
         }
     }
 
-    public FileStream GetFileStream(int bufferSize = 4096) {
+    public FileStream GetFileStream(int bufferSize = 0) {
         return new FileStream(MailslotHandle, FileAccess.Write, bufferSize, IsAsync);
     }
 
-    public static FileStream CreateAsFileStream(string domain, string path, int bufferSize = 4096, bool isAsync = true) {
+    public static FileStream CreateAsFileStream(string domain, string path, int bufferSize = 0, bool isAsync = true) {
         return new MailslotClient(domain, path, isAsync).GetFileStream(bufferSize);
     }
-
-
-    #region PInvoke
-
-    [DllImport("kernel32.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Auto, SetLastError = true)]
-    private static extern SafeFileHandle CreateFile(
-        [In] string lpFileName,
-        [In] FileAccess dwDesiredAccess,
-        [In] FileShare dwShareMode,
-        [In, Optional] IntPtr SecurityAttributes,
-        [In] FileMode dwCreationDisposition,
-        [In] FileAttributes dwFlagsAndAttributes,
-        [In, Optional] IntPtr hTemplateFile
-    );
-
-    #endregion
 }
