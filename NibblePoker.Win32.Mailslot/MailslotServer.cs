@@ -1,4 +1,5 @@
 using Microsoft.Win32.SafeHandles;
+using NibblePoker.Win32.Mailslot.Exceptions;
 using System;
 using System.ComponentModel;
 using System.IO;
@@ -22,7 +23,7 @@ public class MailslotServer : Mailslot {
     public uint ReadTimeoutMs {
         get => _readTimeoutMs;
         set {
-            if(SetMailslotInfo(MailslotHandle, value)) {
+            if (SetMailslotInfo(MailslotHandle, value)) {
                 _readTimeoutMs = value;
             } else {
                 throw new Win32Exception(Marshal.GetLastWin32Error());
@@ -32,12 +33,28 @@ public class MailslotServer : Mailslot {
 
     internal SafeFileHandle MailslotHandle;
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="path"></param>
+    /// <param name="maxMessageSize"></param>
+    /// <param name="readTimeoutMs"></param>
+    /// <exception cref="InvalidUncPathException"></exception>
+    /// <exception cref="ArgumentException">[Includes InvalidUncPathException]</exception>
+    /// <exception cref="Win32Exception">
+    ///     ??? <br/>
+    ///     <see href="https://learn.microsoft.com/en-us/windows/win32/debug/system-error-codes"/>
+    /// </exception>
     public MailslotServer(string path, uint maxMessageSize, uint readTimeoutMs) {
         FullPath = $"\\\\.\\mailslot\\{path}";
-        _maxMessageSize = maxMessageSize ;
+        if (!PathIsUNC(FullPath)) {
+            throw new InvalidUncPathException(".", "mailslot\\" + path);
+        }
+
+        _maxMessageSize = maxMessageSize;
 
         MailslotHandle = CreateMailslot(FullPath, MaxMessageSize, readTimeoutMs, IntPtr.Zero);
-        if(MailslotHandle.IsInvalid) {
+        if (MailslotHandle.IsInvalid) {
             throw new Win32Exception(Marshal.GetLastWin32Error());
         }
     }
@@ -51,7 +68,37 @@ public class MailslotServer : Mailslot {
         return new FileStream(MailslotHandle, FileAccess.Read, bufferSize, true);
     }
 
-    public static FileStream CreateFileStream(string path, uint maxMessageSize, uint readTimeoutMs, int bufferSize = 4096) {
-        return new MailslotServer(path, maxMessageSize, readTimeoutMs).GetFileStream();
+    public static FileStream CreateAsFileStream(string path, uint maxMessageSize, uint readTimeoutMs, int bufferSize = 4096) {
+        return new MailslotServer(path, maxMessageSize, readTimeoutMs).GetFileStream(bufferSize);
     }
+
+
+    #region PInvoke
+
+    [DllImport("kernel32.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Auto, SetLastError = true)]
+    private static extern SafeFileHandle CreateMailslot(
+        [In] string lpName,
+        [In] uint nMaxMessageSize,
+        [In] uint lReadTimeout,
+        [In, Optional] IntPtr lpSecurityAttributes
+    );
+
+    [DllImport("kernel32.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.None, SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    private static extern bool GetMailslotInfo(
+        [In] SafeHandle hMailslot,
+        [Out, Optional] out uint? lpMaxMessageSize,
+        [Out, Optional] out uint? lpNextSize,
+        [Out, Optional] out uint? lpMessageCount,
+        [Out, Optional] out uint? lpReadTimeout
+    );
+
+    [DllImport("kernel32.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.None, SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    private static extern bool SetMailslotInfo(
+      [In] SafeHandle hMailslot,
+      [In] uint lReadTimeout
+    );
+
+    #endregion
 }

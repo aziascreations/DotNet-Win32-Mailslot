@@ -1,0 +1,54 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFrameworks>net35;net40;net8.0;net9.0;net10.0</TargetFrameworks>
+		<LangVersion>latest</LangVersion>
+
+		<ImplicitUsings>disable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+
+		<AssemblyVersion>0.0.1</AssemblyVersion>
+		<FileVersion>0.0.1</FileVersion>
+
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+
+		<!-- https://learn.microsoft.com/en-us/nuget/reference/msbuild-targets#packing-a-license-expression-or-a-license-file -->
+		<PackageId>NibblePoker.Win32.Mailslot</PackageId>
+		<PackageVersion>0.0.1</PackageVersion>
+		<!--<VersionPrefix></VersionPrefix>-->
+		<!--<VersionSuffix></VersionSuffix>-->
+		<Authors>NibblePoker,Herwin Bozet</Authors>
+		<Title>NibblePoker Win32 Mailslot</Title>
+		<Description>A simple and 'to-the-point' library to parse launch arguments in .NET and .NET Core applications.</Description>
+		<!--<Copyright></Copyright>-->
+		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+		<!--<PackageLicenseExpression></PackageLicenseExpression>-->
+		<PackageLicenseFile>LICENSE</PackageLicenseFile>
+		<!--<PackageLicenseUrl></PackageLicenseUrl>-->
+		<PackageProjectUrl>https://github.com/aziascreations/DotNet-Win32-Mailslot</PackageProjectUrl>
+		<PackageIcon>icon.png</PackageIcon>
+		<!--<PackageIconUrl></PackageIconUrl>-->
+		<PackageReadmeFile>readme.md</PackageReadmeFile>
+		<PackageTags>Mailslot;Win32;IPC</PackageTags>
+		<PackageReleaseNotes>
+			Initial release
+		</PackageReleaseNotes>
+		<RepositoryUrl>https://github.com/aziascreations/DotNet-Win32-Mailslot</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<RepositoryBranch>master</RepositoryBranch>
+		<!--<RepositoryCommit></RepositoryCommit>-->
+		<!--<PackageType></PackageType>-->
+	</PropertyGroup>
+
+	<PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+		<DebugType>none</DebugType>
+		<DocumentationFile>bin\Release\NibblePoker.Win32.Mailslot.xml</DocumentationFile>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="..\icon.png" Pack="true" PackagePath="" />
+		<None Include="..\LICENSE" Pack="true" PackagePath="" />
+		<None Include="..\readme.md" Pack="true" PackagePath="" />
+	</ItemGroup>
+
+</Project>
