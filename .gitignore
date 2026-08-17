@@ -93,9 +93,9 @@ fabric.properties
 
 # Custom
 *.DotSettings.user
-NibblePoker.Library.Arguments.Documentation/Help/
+NibblePoker.Win32.Mailslot.Documentation/Help/
 .idea/
 action.yml
 doxygen.conf
 .vs/
-NibblePoker.Library.Arguments.Documentation/html/
+NibblePoker.Win32.Mailslot.Documentation/html/
