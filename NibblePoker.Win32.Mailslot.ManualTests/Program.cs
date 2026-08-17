@@ -9,7 +9,11 @@ internal static class Program {
         string mailslotPath = Guid.NewGuid().ToString();
         string mailslotText = "Hello world !";
 
+        Console.WriteLine(File.Exists($"\\\\.\\mailslot\\{mailslotPath}"));
+
         MailslotServer server = new MailslotServer(mailslotPath, 1024, 99999);
+
+        Console.WriteLine(File.Exists($"\\\\.\\mailslot\\{mailslotPath}"));
 
         MailslotClient clientSync = new MailslotClient(".", mailslotPath, false);
         FileStream clientStream = clientSync.GetFileStream();

@@ -1,11 +1,11 @@
 using Microsoft.Win32.SafeHandles;
-using NibblePoker.Win32.Mailslot.Exceptions;
 using System;
 using System.ComponentModel;
 using System.IO;
 using System.Runtime.InteropServices;
 
 using static NibblePoker.Win32.Mailslot.MailslotBindings;
+using static NibblePoker.Win32.Mailslot.MailslotUtils;
 
 namespace NibblePoker.Win32.Mailslot;
 
@@ -21,6 +21,10 @@ public class MailslotServer {
     public const int MAILSLOT_WAIT_FOREVER = MailslotConstants.MAILSLOT_WAIT_FOREVER;
 
 
+    /// <summary>
+    /// UNC path to which the client is connected.<br/>
+    /// Format: <c>\\{domain}\mailslot\{path}</c>
+    /// </summary>
     public string FullPath {
         get;
         private set;
@@ -58,9 +62,13 @@ public class MailslotServer {
     ///     <see href="https://learn.microsoft.com/en-us/windows/win32/debug/system-error-codes"/>
     /// </exception>
     public MailslotServer(string path, uint maxMessageSize, uint readTimeoutMs) {
+        if (!IsValidUNCPath(path)) {
+            throw new ArgumentException($"Invalid UNC path value ! ({path})", nameof(path));
+        }
+
         FullPath = $"\\\\.\\mailslot\\{path}";
         if (!PathIsUNC(FullPath)) {
-            throw new InvalidUncPathException(".", "mailslot\\" + path);
+            throw new ArgumentException("Invalid combination of UNC host and path values !");
         }
 
         _maxMessageSize = maxMessageSize;
@@ -82,5 +90,13 @@ public class MailslotServer {
 
     public static FileStream CreateAsFileStream(string path, uint maxMessageSize, uint readTimeoutMs, int bufferSize = 4096) {
         return new MailslotServer(path, maxMessageSize, readTimeoutMs).GetFileStream(bufferSize);
+    }
+
+    public static bool ExistsAt(string uncPath) {
+        return File.Exists(uncPath);
+    }
+
+    public static bool ExistsAt(string host, string path) {
+        return ExistsAt($"\\\\{host}\\{path}");
     }
 }

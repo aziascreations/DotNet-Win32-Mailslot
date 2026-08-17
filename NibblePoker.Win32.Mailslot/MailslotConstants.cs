@@ -1,5 +1,8 @@
 namespace NibblePoker.Win32.Mailslot;
 
+/// <summary>
+/// Internal static class that contains all constants used internally or exposed in specific situations.
+/// </summary>
 internal static class MailslotConstants {
     internal const int FILE_FLAG_NONE = 0;
 

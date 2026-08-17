@@ -1,12 +1,13 @@
 using Microsoft.Win32.SafeHandles;
-using NibblePoker.Win32.Mailslot.Exceptions;
 using System;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 
 using static NibblePoker.Win32.Mailslot.MailslotBindings;
 using static NibblePoker.Win32.Mailslot.MailslotConstants;
+using static NibblePoker.Win32.Mailslot.MailslotUtils;
 
 namespace NibblePoker.Win32.Mailslot;
 
@@ -26,17 +27,25 @@ public class MailslotClient {
         private set;
     }
 
-    public bool AutoFlushing {
-        get;
-        private set;
-    }
-
     internal SafeFileHandle MailslotHandle;
 
-    public MailslotClient(string domain, string path, bool isAsync = true) {
-        FullPath = $"\\\\{domain}\\mailslot\\{path}";
+    public MailslotClient(string host, string path, bool isAsync = true, bool mustExist = true) {
+        if (!IsValidUNCHost(host)) {
+            throw new ArgumentException("Invalid UNC host value !", nameof(host));
+        }
+        if (!IsValidUNCPath(path)) {
+            throw new ArgumentException("Invalid UNC path value !", nameof(path));
+        }
+
+        FullPath = $"\\\\{host}\\mailslot\\{path}";
         if (!PathIsUNC(FullPath)) {
-            throw new InvalidUncPathException(domain, "mailslot\\" + path);
+            throw new ArgumentException("Invalid combination of UNC host and path values !");
+        }
+
+        if(mustExist) {
+            if(!File.Exists(FullPath)) {
+                throw new IOException($"The resource at '{FullPath}' doesn't exist !");
+            }
         }
 
         IsAsync = isAsync;
@@ -48,7 +57,7 @@ public class MailslotClient {
             IntPtr.Zero,         // Ignored for mailslots
             FileMode.Open,       // Same as `OPEN_EXISTING`
             IsAsync ? (FileAttributes) FILE_FLAG_OVERLAPPED : FILE_FLAG_NONE,
-            IntPtr.Zero
+            IntPtr.Zero          // Ignored for mailslots
         );
         if (MailslotHandle.IsInvalid) {
             throw new Win32Exception(Marshal.GetLastWin32Error());

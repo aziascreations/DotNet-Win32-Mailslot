@@ -5,6 +5,9 @@ using System.Runtime.InteropServices;
 
 namespace NibblePoker.Win32.Mailslot;
 
+/// <summary>
+/// Internal static class that contains all PInvoke imports.
+/// </summary>
 internal static class MailslotBindings {
     [DllImport("kernel32.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Auto, SetLastError = true)]
     internal static extern SafeFileHandle CreateFile(

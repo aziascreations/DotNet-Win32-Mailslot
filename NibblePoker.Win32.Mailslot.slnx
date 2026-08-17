@@ -1,4 +1,5 @@
 <Solution>
   <Project Path="NibblePoker.Win32.Mailslot.ManualTests/NibblePoker.Win32.Mailslot.ManualTests.csproj" Id="427c7327-8d64-4aa2-9a75-5f718aebf7c3" />
+  <Project Path="NibblePoker.Win32.Mailslot.UnitTests/NibblePoker.Win32.Mailslot.UnitTests.csproj" Id="1b3014a8-9d2b-4ea4-97f6-d36a6662f95c" />
   <Project Path="NibblePoker.Win32.Mailslot/NibblePoker.Win32.Mailslot.csproj" />
 </Solution>
