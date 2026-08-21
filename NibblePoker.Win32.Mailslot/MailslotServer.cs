@@ -13,12 +13,12 @@ public class MailslotServer {
     /// <summary>
     /// There is no next message.
     /// </summary>
-    public const int MAILSLOT_NO_MESSAGE = MailslotConstants.MAILSLOT_NO_MESSAGE;
+    public const uint MAILSLOT_NO_MESSAGE = MailslotConstants.MAILSLOT_NO_MESSAGE;
 
     /// <summary>
     /// Waits forever for a message.
     /// </summary>
-    public const int MAILSLOT_WAIT_FOREVER = MailslotConstants.MAILSLOT_WAIT_FOREVER;
+    public const uint MAILSLOT_WAIT_FOREVER = MailslotConstants.MAILSLOT_WAIT_FOREVER;
 
 
     /// <summary>
@@ -41,6 +41,32 @@ public class MailslotServer {
         set {
             if (SetMailslotInfo(MailslotHandle, value)) {
                 _readTimeoutMs = value;
+            } else {
+                throw new Win32Exception(Marshal.GetLastWin32Error());
+            }
+        }
+    }
+
+    /// <summary>
+    /// Represents the number of messages queued in the mailslot.
+    /// </summary>
+    public uint MessageCount {
+        get {
+            if (GetMailslotInfo(MailslotHandle, out _, out _, out uint dwReturnValue, out _)) {
+                return dwReturnValue;
+            } else {
+                throw new Win32Exception(Marshal.GetLastWin32Error());
+            }
+        }
+    }
+
+    /// <summary>
+    /// Represents the size of the next message in the mailslot queue.
+    /// </summary>
+    public uint NextMessageSize {
+        get {
+            if (GetMailslotInfo(MailslotHandle, out uint dwReturnValue, out _, out _, out _)) {
+                return dwReturnValue;
             } else {
                 throw new Win32Exception(Marshal.GetLastWin32Error());
             }

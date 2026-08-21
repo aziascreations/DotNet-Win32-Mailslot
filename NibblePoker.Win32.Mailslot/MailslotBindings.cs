@@ -38,10 +38,10 @@ internal static class MailslotBindings {
     [return: MarshalAs(UnmanagedType.Bool)]
     internal static extern bool GetMailslotInfo(
         [In] SafeHandle hMailslot,
-        [Out, Optional] out uint? lpMaxMessageSize,
-        [Out, Optional] out uint? lpNextSize,
-        [Out, Optional] out uint? lpMessageCount,
-        [Out, Optional] out uint? lpReadTimeout
+        [Out, Optional] out uint lpMaxMessageSize,
+        [Out, Optional] out uint lpNextSize,
+        [Out, Optional] out uint lpMessageCount,
+        [Out, Optional] out uint lpReadTimeout
     );
 
     [DllImport("kernel32.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.None, SetLastError = true)]
