@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['readme_2emd_0',['readme.md',['../readme_8md.html',1,'']]],
-  ['readtimeoutms_1',['ReadTimeoutMs',['../classMailslotServer.html#a3e0cb96fb074c65907960f68e7bba34f',1,'MailslotServer']]]
+  ['nextmessagesize_0',['NextMessageSize',['../classMailslotServer.html#ad67639d318218f432ae98225d6673b4f',1,'MailslotServer']]]
 ];

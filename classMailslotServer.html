@@ -122,12 +122,12 @@ Static Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
-<tr class="memitem:a68143520f31b98cc451bfab9e51c7913"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMailslotServer.html#a68143520f31b98cc451bfab9e51c7913">MAILSLOT_NO_MESSAGE</a> = MailslotConstants.MAILSLOT_NO_MESSAGE</td></tr>
-<tr class="memdesc:a68143520f31b98cc451bfab9e51c7913"><td class="mdescLeft">&#160;</td><td class="mdescRight">There is no next message.   <a href="classMailslotServer.html#a68143520f31b98cc451bfab9e51c7913">More...</a><br /></td></tr>
-<tr class="separator:a68143520f31b98cc451bfab9e51c7913"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad688abe81990c8c1b1f7faac6b7483d5"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMailslotServer.html#ad688abe81990c8c1b1f7faac6b7483d5">MAILSLOT_WAIT_FOREVER</a> = MailslotConstants.MAILSLOT_WAIT_FOREVER</td></tr>
-<tr class="memdesc:ad688abe81990c8c1b1f7faac6b7483d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Waits forever for a message.   <a href="classMailslotServer.html#ad688abe81990c8c1b1f7faac6b7483d5">More...</a><br /></td></tr>
-<tr class="separator:ad688abe81990c8c1b1f7faac6b7483d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a72f5e807367d7f793d5f213d590d71f2"><td class="memItemLeft" align="right" valign="top">const uint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMailslotServer.html#a72f5e807367d7f793d5f213d590d71f2">MAILSLOT_NO_MESSAGE</a> = MailslotConstants.MAILSLOT_NO_MESSAGE</td></tr>
+<tr class="memdesc:a72f5e807367d7f793d5f213d590d71f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">There is no next message.   <a href="classMailslotServer.html#a72f5e807367d7f793d5f213d590d71f2">More...</a><br /></td></tr>
+<tr class="separator:a72f5e807367d7f793d5f213d590d71f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa8adf694fcaf0b68d0101287249ab6e4"><td class="memItemLeft" align="right" valign="top">const uint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMailslotServer.html#aa8adf694fcaf0b68d0101287249ab6e4">MAILSLOT_WAIT_FOREVER</a> = MailslotConstants.MAILSLOT_WAIT_FOREVER</td></tr>
+<tr class="memdesc:aa8adf694fcaf0b68d0101287249ab6e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Waits forever for a message.   <a href="classMailslotServer.html#aa8adf694fcaf0b68d0101287249ab6e4">More...</a><br /></td></tr>
+<tr class="separator:aa8adf694fcaf0b68d0101287249ab6e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
@@ -139,6 +139,12 @@ Properties</h2></td></tr>
 <tr class="separator:ab13bb1c7c20b959d77bd1e72d1a305ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3e0cb96fb074c65907960f68e7bba34f"><td class="memItemLeft" align="right" valign="top">uint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMailslotServer.html#a3e0cb96fb074c65907960f68e7bba34f">ReadTimeoutMs</a><code> [get, set]</code></td></tr>
 <tr class="separator:a3e0cb96fb074c65907960f68e7bba34f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a1039876976cf76679a16e189e7b29c"><td class="memItemLeft" align="right" valign="top">uint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMailslotServer.html#a4a1039876976cf76679a16e189e7b29c">MessageCount</a><code> [get]</code></td></tr>
+<tr class="memdesc:a4a1039876976cf76679a16e189e7b29c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents the number of messages queued in the mailslot.   <a href="classMailslotServer.html#a4a1039876976cf76679a16e189e7b29c">More...</a><br /></td></tr>
+<tr class="separator:a4a1039876976cf76679a16e189e7b29c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad67639d318218f432ae98225d6673b4f"><td class="memItemLeft" align="right" valign="top">uint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMailslotServer.html#ad67639d318218f432ae98225d6673b4f">NextMessageSize</a><code> [get]</code></td></tr>
+<tr class="memdesc:ad67639d318218f432ae98225d6673b4f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents the size of the next message in the mailslot queue.   <a href="classMailslotServer.html#ad67639d318218f432ae98225d6673b4f">More...</a><br /></td></tr>
+<tr class="separator:ad67639d318218f432ae98225d6673b4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a11395ad4b9cf292573595314e7d65936" name="a11395ad4b9cf292573595314e7d65936"></a>
@@ -366,8 +372,8 @@ Properties</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="a68143520f31b98cc451bfab9e51c7913" name="a68143520f31b98cc451bfab9e51c7913"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a68143520f31b98cc451bfab9e51c7913">&#9670;&#160;</a></span>MAILSLOT_NO_MESSAGE</h2>
+<a id="a72f5e807367d7f793d5f213d590d71f2" name="a72f5e807367d7f793d5f213d590d71f2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a72f5e807367d7f793d5f213d590d71f2">&#9670;&#160;</a></span>MAILSLOT_NO_MESSAGE</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -376,7 +382,7 @@ Properties</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const int MailslotServer.MAILSLOT_NO_MESSAGE = MailslotConstants.MAILSLOT_NO_MESSAGE</td>
+          <td class="memname">const uint MailslotServer.MAILSLOT_NO_MESSAGE = MailslotConstants.MAILSLOT_NO_MESSAGE</td>
         </tr>
       </table>
   </td>
@@ -390,8 +396,8 @@ Properties</h2></td></tr>
 
 </div>
 </div>
-<a id="ad688abe81990c8c1b1f7faac6b7483d5" name="ad688abe81990c8c1b1f7faac6b7483d5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad688abe81990c8c1b1f7faac6b7483d5">&#9670;&#160;</a></span>MAILSLOT_WAIT_FOREVER</h2>
+<a id="aa8adf694fcaf0b68d0101287249ab6e4" name="aa8adf694fcaf0b68d0101287249ab6e4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa8adf694fcaf0b68d0101287249ab6e4">&#9670;&#160;</a></span>MAILSLOT_WAIT_FOREVER</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -400,7 +406,7 @@ Properties</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const int MailslotServer.MAILSLOT_WAIT_FOREVER = MailslotConstants.MAILSLOT_WAIT_FOREVER</td>
+          <td class="memname">const uint MailslotServer.MAILSLOT_WAIT_FOREVER = MailslotConstants.MAILSLOT_WAIT_FOREVER</td>
         </tr>
       </table>
   </td>
@@ -459,6 +465,54 @@ Properties</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4a1039876976cf76679a16e189e7b29c" name="a4a1039876976cf76679a16e189e7b29c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4a1039876976cf76679a16e189e7b29c">&#9670;&#160;</a></span>MessageCount</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint MailslotServer.MessageCount</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Represents the number of messages queued in the mailslot.  </p>
+
+</div>
+</div>
+<a id="ad67639d318218f432ae98225d6673b4f" name="ad67639d318218f432ae98225d6673b4f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad67639d318218f432ae98225d6673b4f">&#9670;&#160;</a></span>NextMessageSize</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint MailslotServer.NextMessageSize</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Represents the size of the next message in the mailslot queue.  </p>
 
 </div>
 </div>
