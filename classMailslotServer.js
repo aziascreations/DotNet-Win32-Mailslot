@@ -1,7 +1,9 @@
 var classMailslotServer =
 [
-    [ "MailslotServer", "classMailslotServer.html#a11395ad4b9cf292573595314e7d65936", null ],
-    [ "CreateAsFileStream", "classMailslotServer.html#abef6233f9f41601a2112dd0a09f0a4e8", null ],
+    [ "MailslotServer", "classMailslotServer.html#a0a32a0553cdad96f1b53e487b2c96e69", null ],
+    [ "MailslotServer", "classMailslotServer.html#ab7277d822f114c40c68ece89f8107b89", null ],
+    [ "CreateAsFileStream", "classMailslotServer.html#a6497630f716e9cce7f7576e81d5b9dd9", null ],
+    [ "CreateAsFileStream", "classMailslotServer.html#a2cdf7e9c10345e4316fc6e0ddd30e3ea", null ],
     [ "ExistsAt", "classMailslotServer.html#ab084b905313b87c39ab049bef059ce49", null ],
     [ "ExistsAt", "classMailslotServer.html#aa123a32592db41c3d457a07761fc0c8f", null ],
     [ "GetFileStream", "classMailslotServer.html#a1c6ba7a1da72f1b03b75e1870cb9da48", null ],

@@ -101,11 +101,18 @@ $(document).ready(function(){initNavTree('classMailslotServer.html',''); initRes
   <div class="headertitle"><div class="title">MailslotServer Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Represents a mailslot server and provides all the utilities related to them.   
+ <a href="classMailslotServer.html#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a11395ad4b9cf292573595314e7d65936"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMailslotServer.html#a11395ad4b9cf292573595314e7d65936">MailslotServer</a> (string path, uint maxMessageSize, uint readTimeoutMs)</td></tr>
-<tr class="separator:a11395ad4b9cf292573595314e7d65936"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0a32a0553cdad96f1b53e487b2c96e69"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMailslotServer.html#a0a32a0553cdad96f1b53e487b2c96e69">MailslotServer</a> (string fullUncPath, uint maxMessageSize, uint readTimeoutMs)</td></tr>
+<tr class="memdesc:a0a32a0553cdad96f1b53e487b2c96e69"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a mailslot server on the given UNC path.   <a href="classMailslotServer.html#a0a32a0553cdad96f1b53e487b2c96e69">More...</a><br /></td></tr>
+<tr class="separator:a0a32a0553cdad96f1b53e487b2c96e69"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab7277d822f114c40c68ece89f8107b89"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMailslotServer.html#ab7277d822f114c40c68ece89f8107b89">MailslotServer</a> (string? uncDomain, string mailslotPath, uint maxMessageSize, uint readTimeoutMs)</td></tr>
+<tr class="memdesc:ab7277d822f114c40c68ece89f8107b89"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a mailslot server on the given UNC domain at the given mailslot path.   <a href="classMailslotServer.html#ab7277d822f114c40c68ece89f8107b89">More...</a><br /></td></tr>
+<tr class="separator:ab7277d822f114c40c68ece89f8107b89"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6ace30f9d6f637b2bc34c516c2d399a5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classMailslotServer.html">MailslotServer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMailslotServer.html#a6ace30f9d6f637b2bc34c516c2d399a5">SetReadTimeoutMs</a> (uint readTimeoutMs)</td></tr>
 <tr class="separator:a6ace30f9d6f637b2bc34c516c2d399a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1c6ba7a1da72f1b03b75e1870cb9da48"><td class="memItemLeft" align="right" valign="top">FileStream&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMailslotServer.html#a1c6ba7a1da72f1b03b75e1870cb9da48">GetFileStream</a> (int bufferSize=4096)</td></tr>
@@ -113,11 +120,17 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:abef6233f9f41601a2112dd0a09f0a4e8"><td class="memItemLeft" align="right" valign="top">static FileStream&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMailslotServer.html#abef6233f9f41601a2112dd0a09f0a4e8">CreateAsFileStream</a> (string path, uint maxMessageSize, uint readTimeoutMs, int bufferSize=4096)</td></tr>
-<tr class="separator:abef6233f9f41601a2112dd0a09f0a4e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6497630f716e9cce7f7576e81d5b9dd9"><td class="memItemLeft" align="right" valign="top">static FileStream&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMailslotServer.html#a6497630f716e9cce7f7576e81d5b9dd9">CreateAsFileStream</a> (string fullUncPath, uint maxMessageSize, uint readTimeoutMs, int bufferSize=4096)</td></tr>
+<tr class="memdesc:a6497630f716e9cce7f7576e81d5b9dd9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a mailslot server and returns its FileStream directly.   <a href="classMailslotServer.html#a6497630f716e9cce7f7576e81d5b9dd9">More...</a><br /></td></tr>
+<tr class="separator:a6497630f716e9cce7f7576e81d5b9dd9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2cdf7e9c10345e4316fc6e0ddd30e3ea"><td class="memItemLeft" align="right" valign="top">static FileStream&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMailslotServer.html#a2cdf7e9c10345e4316fc6e0ddd30e3ea">CreateAsFileStream</a> (string? uncDomain, string mailslotPath, uint maxMessageSize, uint readTimeoutMs, int bufferSize=4096)</td></tr>
+<tr class="memdesc:a2cdf7e9c10345e4316fc6e0ddd30e3ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a mailslot server and returns its FileStream directly.   <a href="classMailslotServer.html#a2cdf7e9c10345e4316fc6e0ddd30e3ea">More...</a><br /></td></tr>
+<tr class="separator:a2cdf7e9c10345e4316fc6e0ddd30e3ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa123a32592db41c3d457a07761fc0c8f"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMailslotServer.html#aa123a32592db41c3d457a07761fc0c8f">ExistsAt</a> (string uncPath)</td></tr>
+<tr class="memdesc:aa123a32592db41c3d457a07761fc0c8f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if a mailslot exists at a given UNC path.   <a href="classMailslotServer.html#aa123a32592db41c3d457a07761fc0c8f">More...</a><br /></td></tr>
 <tr class="separator:aa123a32592db41c3d457a07761fc0c8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab084b905313b87c39ab049bef059ce49"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMailslotServer.html#ab084b905313b87c39ab049bef059ce49">ExistsAt</a> (string host, string path)</td></tr>
+<tr class="memdesc:ab084b905313b87c39ab049bef059ce49"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if a mailslot exists in a given UNC domain and at a given mailslot path.   <a href="classMailslotServer.html#ab084b905313b87c39ab049bef059ce49">More...</a><br /></td></tr>
 <tr class="separator:ab084b905313b87c39ab049bef059ce49"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
@@ -146,9 +159,11 @@ Properties</h2></td></tr>
 <tr class="memdesc:ad67639d318218f432ae98225d6673b4f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents the size of the next message in the mailslot queue.   <a href="classMailslotServer.html#ad67639d318218f432ae98225d6673b4f">More...</a><br /></td></tr>
 <tr class="separator:ad67639d318218f432ae98225d6673b4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a11395ad4b9cf292573595314e7d65936" name="a11395ad4b9cf292573595314e7d65936"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a11395ad4b9cf292573595314e7d65936">&#9670;&#160;</a></span>MailslotServer()</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p >Represents a mailslot server and provides all the utilities related to them.  </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a0a32a0553cdad96f1b53e487b2c96e69" name="a0a32a0553cdad96f1b53e487b2c96e69"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0a32a0553cdad96f1b53e487b2c96e69">&#9670;&#160;</a></span>MailslotServer() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -160,7 +175,7 @@ Properties</h2></td></tr>
           <td class="memname">MailslotServer.MailslotServer </td>
           <td>(</td>
           <td class="paramtype">string&#160;</td>
-          <td class="paramname"><em>path</em>, </td>
+          <td class="paramname"><em>fullUncPath</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -187,10 +202,11 @@ Properties</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p></p>
+<p>Creates a mailslot server on the given UNC path.  </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">path</td><td></td></tr>
+    <tr><td class="paramname">fullUncPath</td><td>The UNC path at which the mailslot should be created.<br  />
+ Format: <code>\{domain}\mailslot\{path}</code> </td></tr>
     <tr><td class="paramname">maxMessageSize</td><td></td></tr>
     <tr><td class="paramname">readTimeoutMs</td><td></td></tr>
   </table>
@@ -198,7 +214,6 @@ Properties</h2></td></tr>
 </dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname">InvalidUncPathException</td><td></td></tr>
     <tr><td class="paramname">ArgumentException</td><td>[Includes InvalidUncPathException]</td></tr>
     <tr><td class="paramname">Win32Exception</td><td>??? <br  />
   </td></tr>
@@ -208,9 +223,77 @@ Properties</h2></td></tr>
 
 </div>
 </div>
+<a id="ab7277d822f114c40c68ece89f8107b89" name="ab7277d822f114c40c68ece89f8107b89"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab7277d822f114c40c68ece89f8107b89">&#9670;&#160;</a></span>MailslotServer() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">MailslotServer.MailslotServer </td>
+          <td>(</td>
+          <td class="paramtype">string?&#160;</td>
+          <td class="paramname"><em>uncDomain</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>mailslotPath</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint&#160;</td>
+          <td class="paramname"><em>maxMessageSize</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint&#160;</td>
+          <td class="paramname"><em>readTimeoutMs</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Creates a mailslot server on the given UNC domain at the given mailslot path.  </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">uncDomain</td><td>UNC domain in which the mailslot should be created. Leave as <code>null</code> to use <code>.</code> </td></tr>
+    <tr><td class="paramname">mailslotPath</td><td>The mailslot's path at which it should be available in the previously given domain.<br  />
+ Shouldn't contain the <code>mailslot&lt;/c&gt; part. </code></td></tr>
+    <tr><td class="paramname">maxMessageSize</td><td><code></code></td></tr>
+    <tr><td class="paramname">readTimeoutMs</td><td><code></code></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">ArgumentException</td><td><code>[Includes InvalidUncPathException]</code></td></tr>
+    <tr><td class="paramname">Win32Exception</td><td><code> ??? <br  />
+  </code></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="abef6233f9f41601a2112dd0a09f0a4e8" name="abef6233f9f41601a2112dd0a09f0a4e8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abef6233f9f41601a2112dd0a09f0a4e8">&#9670;&#160;</a></span>CreateAsFileStream()</h2>
+<a id="a6497630f716e9cce7f7576e81d5b9dd9" name="a6497630f716e9cce7f7576e81d5b9dd9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6497630f716e9cce7f7576e81d5b9dd9">&#9670;&#160;</a></span>CreateAsFileStream() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -222,7 +305,7 @@ Properties</h2></td></tr>
           <td class="memname">static FileStream MailslotServer.CreateAsFileStream </td>
           <td>(</td>
           <td class="paramtype">string&#160;</td>
-          <td class="paramname"><em>path</em>, </td>
+          <td class="paramname"><em>fullUncPath</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -254,6 +337,88 @@ Properties</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Creates a mailslot server and returns its FileStream directly.  </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">fullUncPath</td><td></td></tr>
+    <tr><td class="paramname">maxMessageSize</td><td></td></tr>
+    <tr><td class="paramname">readTimeoutMs</td><td></td></tr>
+    <tr><td class="paramname">bufferSize</td><td>A positive Int32 value greater than 0 indicating the buffer size.<br  />
+ The default buffer size is 4096. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+
+</div>
+</div>
+<a id="a2cdf7e9c10345e4316fc6e0ddd30e3ea" name="a2cdf7e9c10345e4316fc6e0ddd30e3ea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2cdf7e9c10345e4316fc6e0ddd30e3ea">&#9670;&#160;</a></span>CreateAsFileStream() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static FileStream MailslotServer.CreateAsFileStream </td>
+          <td>(</td>
+          <td class="paramtype">string?&#160;</td>
+          <td class="paramname"><em>uncDomain</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>mailslotPath</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint&#160;</td>
+          <td class="paramname"><em>maxMessageSize</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint&#160;</td>
+          <td class="paramname"><em>readTimeoutMs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>bufferSize</em> = <code>4096</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Creates a mailslot server and returns its FileStream directly.  </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">uncDomain</td><td>UNC domain in which the mailslot should be created. Leave as <code>null</code> to use <code>.</code> </td></tr>
+    <tr><td class="paramname">mailslotPath</td><td>The mailslot's path at which it should be available in the previously given domain.<br  />
+ Shouldn't contain the <code>mailslot&lt;/c&gt; part. </code></td></tr>
+    <tr><td class="paramname">maxMessageSize</td><td><code></code></td></tr>
+    <tr><td class="paramname">readTimeoutMs</td><td><code></code></td></tr>
+    <tr><td class="paramname">bufferSize</td><td><code> A positive Int32 value greater than 0 indicating the buffer size.<br  />
+ The default buffer size is 4096. </code></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code></code></dd></dl>
 
 </div>
 </div>
@@ -291,6 +456,16 @@ Properties</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Checks if a mailslot exists in a given UNC domain and at a given mailslot path.  </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">host</td><td></td></tr>
+    <tr><td class="paramname">path</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+
 </div>
 </div>
 <a id="aa123a32592db41c3d457a07761fc0c8f" name="aa123a32592db41c3d457a07761fc0c8f"></a>
@@ -317,6 +492,15 @@ Properties</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Checks if a mailslot exists at a given UNC path.  </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">uncPath</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+
 </div>
 </div>
 <a id="a1c6ba7a1da72f1b03b75e1870cb9da48" name="a1c6ba7a1da72f1b03b75e1870cb9da48"></a>
@@ -342,6 +526,17 @@ Properties</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p></p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">bufferSize</td><td>A positive Int32 value greater than 0 indicating the buffer size.<br  />
+ The default buffer size is 4096. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+<p >The returned FileStream doesn't own the SafeFileHandle, the <a class="el" href="classMailslotServer.html" title="Represents a mailslot server and provides all the utilities related to them.">MailslotServer</a> instance does. </p>
 
 </div>
 </div>

@@ -100,18 +100,25 @@ $(document).ready(function(){initNavTree('classMailslotClient.html',''); initRes
   <div class="headertitle"><div class="title">MailslotClient Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Represents a mailslot server and provides all the utilities related to them.   
+ <a href="classMailslotClient.html#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a0183ad214861988763b44ddfcd1111cf"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMailslotClient.html#a0183ad214861988763b44ddfcd1111cf">MailslotClient</a> (string host, string path, bool isAsync=true, bool mustExist=true)</td></tr>
 <tr class="separator:a0183ad214861988763b44ddfcd1111cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2d7c54f70af8a5df547430dc0989aa6d"><td class="memItemLeft" align="right" valign="top">FileStream&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMailslotClient.html#a2d7c54f70af8a5df547430dc0989aa6d">GetFileStream</a> (int bufferSize=0)</td></tr>
-<tr class="separator:a2d7c54f70af8a5df547430dc0989aa6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9cc1b7d6b6cc59c1cdf6f6ddb8e9bf31"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMailslotClient.html#a9cc1b7d6b6cc59c1cdf6f6ddb8e9bf31">Send</a> (string textToSend, Encoding? encoding)</td></tr>
+<tr class="separator:a9cc1b7d6b6cc59c1cdf6f6ddb8e9bf31"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a91bd5eecc063246ae57486b0893fd37d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMailslotClient.html#a91bd5eecc063246ae57486b0893fd37d">Send</a> (byte[] dataToSend)</td></tr>
+<tr class="separator:a91bd5eecc063246ae57486b0893fd37d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1b48e71374d21e095020b9d72d0bf0f8"><td class="memItemLeft" align="right" valign="top">FileStream&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMailslotClient.html#a1b48e71374d21e095020b9d72d0bf0f8">GetFileStream</a> (int bufferSize=4096)</td></tr>
+<tr class="separator:a1b48e71374d21e095020b9d72d0bf0f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a6c029f7806ceac314659c9daa41eed69"><td class="memItemLeft" align="right" valign="top">static FileStream&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMailslotClient.html#a6c029f7806ceac314659c9daa41eed69">CreateAsFileStream</a> (string domain, string path, int bufferSize=0, bool isAsync=true)</td></tr>
-<tr class="separator:a6c029f7806ceac314659c9daa41eed69"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad51ab606c9c947bd40f4475a2145f379"><td class="memItemLeft" align="right" valign="top">static FileStream&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMailslotClient.html#ad51ab606c9c947bd40f4475a2145f379">CreateAsFileStream</a> (string domain, string path, int bufferSize=4096, bool isAsync=true)</td></tr>
+<tr class="separator:ad51ab606c9c947bd40f4475a2145f379"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
@@ -122,7 +129,9 @@ Properties</h2></td></tr>
 <tr class="memitem:ab19a9c2b2686a923c6512dc4385f7867"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMailslotClient.html#ab19a9c2b2686a923c6512dc4385f7867">IsAsync</a><code> [get]</code></td></tr>
 <tr class="separator:ab19a9c2b2686a923c6512dc4385f7867"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p >Represents a mailslot server and provides all the utilities related to them.  </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a0183ad214861988763b44ddfcd1111cf" name="a0183ad214861988763b44ddfcd1111cf"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0183ad214861988763b44ddfcd1111cf">&#9670;&#160;</a></span>MailslotClient()</h2>
 
@@ -172,8 +181,8 @@ Properties</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a6c029f7806ceac314659c9daa41eed69" name="a6c029f7806ceac314659c9daa41eed69"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6c029f7806ceac314659c9daa41eed69">&#9670;&#160;</a></span>CreateAsFileStream()</h2>
+<a id="ad51ab606c9c947bd40f4475a2145f379" name="ad51ab606c9c947bd40f4475a2145f379"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad51ab606c9c947bd40f4475a2145f379">&#9670;&#160;</a></span>CreateAsFileStream()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -197,7 +206,7 @@ Properties</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>bufferSize</em> = <code>0</code>, </td>
+          <td class="paramname"><em>bufferSize</em> = <code>4096</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -218,10 +227,23 @@ Properties</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p></p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">domain</td><td></td></tr>
+    <tr><td class="paramname">path</td><td></td></tr>
+    <tr><td class="paramname">bufferSize</td><td>A positive Int32 value greater than 0 indicating the buffer size.<br  />
+ The default buffer size is 4096. </td></tr>
+    <tr><td class="paramname">isAsync</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+
 </div>
 </div>
-<a id="a2d7c54f70af8a5df547430dc0989aa6d" name="a2d7c54f70af8a5df547430dc0989aa6d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2d7c54f70af8a5df547430dc0989aa6d">&#9670;&#160;</a></span>GetFileStream()</h2>
+<a id="a1b48e71374d21e095020b9d72d0bf0f8" name="a1b48e71374d21e095020b9d72d0bf0f8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1b48e71374d21e095020b9d72d0bf0f8">&#9670;&#160;</a></span>GetFileStream()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -233,7 +255,7 @@ Properties</h2></td></tr>
           <td class="memname">FileStream MailslotClient.GetFileStream </td>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>bufferSize</em> = <code>0</code></td><td>)</td>
+          <td class="paramname"><em>bufferSize</em> = <code>4096</code></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -243,6 +265,103 @@ Properties</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p></p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">bufferSize</td><td>A positive Int32 value greater than 0 indicating the buffer size.<br  />
+ The default buffer size is 4096. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+
+</div>
+</div>
+<a id="a91bd5eecc063246ae57486b0893fd37d" name="a91bd5eecc063246ae57486b0893fd37d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a91bd5eecc063246ae57486b0893fd37d">&#9670;&#160;</a></span>Send() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool MailslotClient.Send </td>
+          <td>(</td>
+          <td class="paramtype">byte[]&#160;</td>
+          <td class="paramname"><em>dataToSend</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p></p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">dataToSend</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">NullReferenceException</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a9cc1b7d6b6cc59c1cdf6f6ddb8e9bf31" name="a9cc1b7d6b6cc59c1cdf6f6ddb8e9bf31"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9cc1b7d6b6cc59c1cdf6f6ddb8e9bf31">&#9670;&#160;</a></span>Send() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool MailslotClient.Send </td>
+          <td>(</td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>textToSend</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Encoding?&#160;</td>
+          <td class="paramname"><em>encoding</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p></p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">textToSend</td><td></td></tr>
+    <tr><td class="paramname">encoding</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
 
 </div>
 </div>

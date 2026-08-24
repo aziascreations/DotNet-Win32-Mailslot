@@ -6,7 +6,7 @@ var searchData=
   ['mailslotclient_3',['MailslotClient',['../classMailslotClient.html',1,'MailslotClient'],['../classMailslotClient.html#a0183ad214861988763b44ddfcd1111cf',1,'MailslotClient.MailslotClient()']]],
   ['mailslotclient_2ecs_4',['MailslotClient.cs',['../MailslotClient_8cs.html',1,'']]],
   ['mailslotconstants_2ecs_5',['MailslotConstants.cs',['../MailslotConstants_8cs.html',1,'']]],
-  ['mailslotserver_6',['MailslotServer',['../classMailslotServer.html',1,'MailslotServer'],['../classMailslotServer.html#a11395ad4b9cf292573595314e7d65936',1,'MailslotServer.MailslotServer()']]],
+  ['mailslotserver_6',['MailslotServer',['../classMailslotServer.html',1,'MailslotServer'],['../classMailslotServer.html#a0a32a0553cdad96f1b53e487b2c96e69',1,'MailslotServer.MailslotServer(string fullUncPath, uint maxMessageSize, uint readTimeoutMs)'],['../classMailslotServer.html#ab7277d822f114c40c68ece89f8107b89',1,'MailslotServer.MailslotServer(string? uncDomain, string mailslotPath, uint maxMessageSize, uint readTimeoutMs)']]],
   ['mailslotserver_2ecs_7',['MailslotServer.cs',['../MailslotServer_8cs.html',1,'']]],
   ['mailslotutils_2ecs_8',['MailslotUtils.cs',['../MailslotUtils_8cs.html',1,'']]],
   ['maxmessagesize_9',['MaxMessageSize',['../classMailslotServer.html#ab13bb1c7c20b959d77bd1e72d1a305ac',1,'MailslotServer']]],
