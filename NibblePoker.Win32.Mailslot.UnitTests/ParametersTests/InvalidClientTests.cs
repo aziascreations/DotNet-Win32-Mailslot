@@ -1,7 +1,7 @@
 using NUnit.Framework;
 using System;
 
-namespace NibblePoker.Win32.Mailslot.UnitTests;
+namespace NibblePoker.Win32.Mailslot.UnitTests.ParametersTests;
 
 public class InvalidClientTests {
 

@@ -2,15 +2,20 @@ using Microsoft.Win32.SafeHandles;
 using System;
 using System.ComponentModel;
 using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text;
 
 using static NibblePoker.Win32.Mailslot.MailslotBindings;
 using static NibblePoker.Win32.Mailslot.MailslotConstants;
 using static NibblePoker.Win32.Mailslot.MailslotUtils;
 
+#pragma warning disable IDE0074 // Use compound assignment
+
 namespace NibblePoker.Win32.Mailslot;
 
+/// <summary>
+/// Represents a mailslot server and provides all the utilities related to them.
+/// </summary>
 public class MailslotClient {
 
     /// <summary>
@@ -42,8 +47,8 @@ public class MailslotClient {
             throw new ArgumentException("Invalid combination of UNC host and path values !");
         }
 
-        if(mustExist) {
-            if(!File.Exists(FullPath)) {
+        if (mustExist) {
+            if (!File.Exists(FullPath)) {
                 throw new IOException($"The resource at '{FullPath}' doesn't exist !");
             }
         }
@@ -64,11 +69,63 @@ public class MailslotClient {
         }
     }
 
-    public FileStream GetFileStream(int bufferSize = 0) {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="textToSend"></param>
+    /// <param name="encoding"></param>
+    /// <returns></returns>
+    public bool Send(string textToSend, Encoding? encoding) {
+        if (encoding == null) {
+            encoding = Encoding.Default;
+        }
+
+        return Send(encoding.GetBytes(textToSend));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="dataToSend"></param>
+    /// <returns></returns>
+    /// <exception cref="NullReferenceException"></exception>
+    public bool Send(byte[] dataToSend) {
+        if (dataToSend == null) {
+            throw new NullReferenceException("...");
+        }
+
+        using FileStream client = this.GetFileStream();
+        client.Write(dataToSend, 0, dataToSend.Length);
+        client.Flush();
+
+        return true;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="bufferSize">
+    ///     A positive <see cref="Int32"/> value greater than 0 indicating the buffer size.<br/>
+    ///     The default buffer size is 4096.
+    /// </param>
+    /// <returns></returns>
+    public FileStream GetFileStream(int bufferSize = 4096) {
         return new FileStream(MailslotHandle, FileAccess.Write, bufferSize, IsAsync);
     }
 
-    public static FileStream CreateAsFileStream(string domain, string path, int bufferSize = 0, bool isAsync = true) {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="domain"></param>
+    /// <param name="path"></param>
+    /// <param name="bufferSize">
+    ///     A positive <see cref="Int32"/> value greater than 0 indicating the buffer size.<br/>
+    ///     The default buffer size is 4096.
+    /// </param>
+    /// <param name="isAsync"></param>
+    /// <returns></returns>
+    public static FileStream CreateAsFileStream(string domain, string path, int bufferSize = 4096, bool isAsync = true) {
         return new MailslotClient(domain, path, isAsync).GetFileStream(bufferSize);
     }
+
 }

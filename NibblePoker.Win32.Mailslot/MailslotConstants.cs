@@ -10,9 +10,13 @@ internal static class MailslotConstants {
 
     internal const int FILE_FLAG_NO_BUFFERING = 0x20000000;
 
-    //internal const int MAILSLOT_NO_MESSAGE = -1;
+    /// <summary>
+    /// Same as a <c>((DWORD) -1)</c> from the Win32 APIs.
+    /// </summary>
     internal const uint MAILSLOT_NO_MESSAGE = 0xFFFFFFFF;
 
-    //internal const int MAILSLOT_WAIT_FOREVER = -1;
+    /// <summary>
+    /// Same as a <c>((DWORD) -1)</c> from the Win32 APIs.
+    /// </summary>
     internal const uint MAILSLOT_WAIT_FOREVER = 0xFFFFFFFF;
 }

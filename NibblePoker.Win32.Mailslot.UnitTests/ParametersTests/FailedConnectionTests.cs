@@ -1,8 +1,7 @@
 using NUnit.Framework;
-using System;
 using System.IO;
 
-namespace NibblePoker.Win32.Mailslot.UnitTests;
+namespace NibblePoker.Win32.Mailslot.UnitTests.ParametersTests;
 
 internal class FailedConnectionTests {
 
