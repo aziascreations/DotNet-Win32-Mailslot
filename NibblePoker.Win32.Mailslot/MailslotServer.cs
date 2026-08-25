@@ -12,7 +12,7 @@ namespace NibblePoker.Win32.Mailslot;
 /// <summary>
 /// Represents a mailslot server and provides all the utilities related to them.
 /// </summary>
-public class MailslotServer {
+public class MailslotServer : IDisposable {
     /// <summary>
     /// There is no next message.
     /// </summary>
@@ -32,18 +32,26 @@ public class MailslotServer {
         private set;
     }
 
-    private readonly uint _maxMessageSize;
     public uint MaxMessageSize {
-        get => _maxMessageSize;
+        get {
+            if (GetMailslotInfo(MailslotHandle, out uint dwReturnValue, out _, out _, out _)) {
+                return dwReturnValue;
+            } else {
+                throw new Win32Exception(Marshal.GetLastWin32Error());
+            }
+        }
     }
 
-    private uint _readTimeoutMs;
     public uint ReadTimeoutMs {
-        get => _readTimeoutMs;
-        set {
-            if (SetMailslotInfo(MailslotHandle, value)) {
-                _readTimeoutMs = value;
+        get {
+            if (GetMailslotInfo(MailslotHandle, out _, out _, out _, out uint dwReturnValue)) {
+                return dwReturnValue;
             } else {
+                throw new Win32Exception(Marshal.GetLastWin32Error());
+            }
+        }
+        set {
+            if (!SetMailslotInfo(MailslotHandle, value)) {
                 throw new Win32Exception(Marshal.GetLastWin32Error());
             }
         }
@@ -96,11 +104,9 @@ public class MailslotServer {
             throw new ArgumentException($"The UNC path `{fullUncPath}` is invalid !", nameof(fullUncPath));
         }
 
-        _maxMessageSize = maxMessageSize;
-
         FullPath = fullUncPath;
 
-        MailslotHandle = CreateMailslot(fullUncPath, MaxMessageSize, readTimeoutMs, IntPtr.Zero);
+        MailslotHandle = CreateMailslot(fullUncPath, maxMessageSize, readTimeoutMs, IntPtr.Zero);
         if (MailslotHandle.IsInvalid) {
             throw new Win32Exception(Marshal.GetLastWin32Error());
         }
@@ -138,9 +144,7 @@ public class MailslotServer {
             throw new ArgumentException("Invalid combination of UNC domain and mailslot path values !");
         }
 
-        _maxMessageSize = maxMessageSize;
-
-        MailslotHandle = CreateMailslot(FullPath, MaxMessageSize, readTimeoutMs, IntPtr.Zero);
+        MailslotHandle = CreateMailslot(FullPath, maxMessageSize, readTimeoutMs, IntPtr.Zero);
         if (MailslotHandle.IsInvalid) {
             throw new Win32Exception(Marshal.GetLastWin32Error());
         }
@@ -165,6 +169,15 @@ public class MailslotServer {
     public FileStream GetFileStream(int bufferSize = 4096) {
         //var a = new FileStream(MailslotHandle, FileAccess.Read, bufferSize, true, ownsHandle: false);
         return new FileStream(MailslotHandle, FileAccess.Read, bufferSize, true);
+    }
+
+    public void Dispose() {
+        if (MailslotHandle.IsInvalid) {
+            throw new Win32Exception(Marshal.GetLastWin32Error());
+        }
+
+        MailslotHandle.Close();
+        GC.SuppressFinalize(this);
     }
 
     /// <summary>

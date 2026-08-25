@@ -16,7 +16,7 @@ namespace NibblePoker.Win32.Mailslot;
 /// <summary>
 /// Represents a mailslot server and provides all the utilities related to them.
 /// </summary>
-public class MailslotClient {
+public class MailslotClient : IDisposable {
 
     /// <summary>
     /// UNC path to which the client is connected.<br/>
@@ -101,6 +101,15 @@ public class MailslotClient {
         return true;
     }
 
+    public void Dispose() {
+        if (MailslotHandle.IsInvalid) {
+            throw new Win32Exception(Marshal.GetLastWin32Error());
+        }
+
+        MailslotHandle.Close();
+        GC.SuppressFinalize(this);
+    }
+
     /// <summary>
     /// 
     /// </summary>
@@ -127,5 +136,4 @@ public class MailslotClient {
     public static FileStream CreateAsFileStream(string domain, string path, int bufferSize = 4096, bool isAsync = true) {
         return new MailslotClient(domain, path, isAsync).GetFileStream(bufferSize);
     }
-
 }
