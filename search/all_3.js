@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['fullpath_0',['FullPath',['../classMailslotClient.html#aac9116c31314e8a4b69802c9fc5d65ee',1,'MailslotClient.FullPath()'],['../classMailslotServer.html#a0b1e76d239939e3024150d6e9dfb6c4f',1,'MailslotServer.FullPath()']]]
+  ['existsat_0',['ExistsAt',['../classMailslotServer.html#aa123a32592db41c3d457a07761fc0c8f',1,'MailslotServer.ExistsAt(string uncPath)'],['../classMailslotServer.html#ab084b905313b87c39ab049bef059ce49',1,'MailslotServer.ExistsAt(string host, string path)']]]
 ];

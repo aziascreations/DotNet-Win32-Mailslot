@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['getfilestream_0',['GetFileStream',['../classMailslotClient.html#a1b48e71374d21e095020b9d72d0bf0f8',1,'MailslotClient.GetFileStream()'],['../classMailslotServer.html#a1c6ba7a1da72f1b03b75e1870cb9da48',1,'MailslotServer.GetFileStream()']]]
+  ['existsat_0',['ExistsAt',['../classMailslotServer.html#aa123a32592db41c3d457a07761fc0c8f',1,'MailslotServer.ExistsAt(string uncPath)'],['../classMailslotServer.html#ab084b905313b87c39ab049bef059ce49',1,'MailslotServer.ExistsAt(string host, string path)']]]
 ];

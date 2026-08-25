@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['getfilestream_0',['GetFileStream',['../classMailslotClient.html#a1b48e71374d21e095020b9d72d0bf0f8',1,'MailslotClient.GetFileStream()'],['../classMailslotServer.html#a1c6ba7a1da72f1b03b75e1870cb9da48',1,'MailslotServer.GetFileStream()']]]
+  ['fullpath_0',['FullPath',['../classMailslotClient.html#aac9116c31314e8a4b69802c9fc5d65ee',1,'MailslotClient.FullPath()'],['../classMailslotServer.html#a0b1e76d239939e3024150d6e9dfb6c4f',1,'MailslotServer.FullPath()']]]
 ];

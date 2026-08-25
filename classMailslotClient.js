@@ -2,6 +2,7 @@ var classMailslotClient =
 [
     [ "MailslotClient", "classMailslotClient.html#a0183ad214861988763b44ddfcd1111cf", null ],
     [ "CreateAsFileStream", "classMailslotClient.html#ad51ab606c9c947bd40f4475a2145f379", null ],
+    [ "Dispose", "classMailslotClient.html#acb0a4fdd73e8a5ad0df371539aa9e8e9", null ],
     [ "GetFileStream", "classMailslotClient.html#a1b48e71374d21e095020b9d72d0bf0f8", null ],
     [ "Send", "classMailslotClient.html#a91bd5eecc063246ae57486b0893fd37d", null ],
     [ "Send", "classMailslotClient.html#a9cc1b7d6b6cc59c1cdf6f6ddb8e9bf31", null ],

@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['send_0',['Send',['../classMailslotClient.html#a9cc1b7d6b6cc59c1cdf6f6ddb8e9bf31',1,'MailslotClient.Send(string textToSend, Encoding? encoding)'],['../classMailslotClient.html#a91bd5eecc063246ae57486b0893fd37d',1,'MailslotClient.Send(byte[] dataToSend)']]],
-  ['setreadtimeoutms_1',['SetReadTimeoutMs',['../classMailslotServer.html#a6ace30f9d6f637b2bc34c516c2d399a5',1,'MailslotServer']]]
+  ['mailslotclient_0',['MailslotClient',['../classMailslotClient.html#a0183ad214861988763b44ddfcd1111cf',1,'MailslotClient']]],
+  ['mailslotserver_1',['MailslotServer',['../classMailslotServer.html#a0a32a0553cdad96f1b53e487b2c96e69',1,'MailslotServer.MailslotServer(string fullUncPath, uint maxMessageSize, uint readTimeoutMs)'],['../classMailslotServer.html#ab7277d822f114c40c68ece89f8107b89',1,'MailslotServer.MailslotServer(string? uncDomain, string mailslotPath, uint maxMessageSize, uint readTimeoutMs)']]]
 ];
