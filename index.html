@@ -97,12 +97,23 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <div class="contents">
 <div class="textblock"><p ><a class="anchor" id="md__github_workspace_readme"></a> <a href="https://www.nuget.org/packages/NibblePoker.Win32.Mailslot"><img src="https://img.shields.io/nuget/v/NibblePoker.Win32.Mailslot?label=Latest%20version" alt="Nuget.org latest version" class="inline"/></a> <a href="https://www.nuget.org/packages/NibblePoker.Win32.Mailslot"><img src="https://img.shields.io/nuget/dt/NibblePoker.Win32.Mailslot?label=Downloads" alt="Nuget.org downloads count" class="inline"/></a> <a href="https://github.com/aziascreations/DotNet-Win32-Mailslot/blob/master/LICENSE"><img src="https://img.shields.io/github/license/aziascreations/DotNet-Win32-Mailslot" alt="Repository's License" class="inline"/></a></p>
 <p >A simple library that exposes classes to interact with mailslots in a safe and .NET-friendly way.</p>
+<p ><b>Documentation:</b> <a href="https://aziascreations.github.io/DotNet-Win32-Mailslot/">aziascreations.github.io/DotNet-Win32-Mailslot/</a></p>
 <h1><a class="anchor" id="autotoc_md1"></a>
 Features</h1>
 <ul>
-<li>???<ul>
-<li>[FileStream]</li>
-<li>[SimplifiedApi]</li>
+<li>Simple and complete feature set<ul>
+<li>FileStream IO *(Async/Sync)*<ul>
+<li>With and without handle ownership</li>
+<li>Thread-safety not included<em>*</em></li>
+</ul>
+</li>
+<li>Simplified IO *(Sync)*<ul>
+<li>No handle ownership worries</li>
+<li>Auto encoding</li>
+<li>Thread-safe</li>
+</ul>
+</li>
+<li>Utilities for UNC paths</li>
 </ul>
 </li>
 <li>Easy to use, lightweight and 'to-the-point' philosophy<ul>
@@ -117,6 +128,7 @@ Features</h1>
 </ul>
 </li>
 </ul>
+<p ><em>*: Must be handled in your app via a <code>lock</code>.</em></p>
 <h1><a class="anchor" id="autotoc_md2"></a>
 Requirements</h1>
 <ul>
@@ -131,48 +143,97 @@ Requirements</h1>
 </ul>
 </li>
 </ul>
-<h1><a class="anchor" id="autotoc_md3"></a>
-Documentation</h1>
-<p >Go to <a href="https://aziascreations.github.io/DotNet-Win32-Mailslot/">aziascreations.github.io/DotNet-Win32-Mailslot/</a> for the HTML documentation.</p>
+<p ><br  />
+</p>
+<hr  />
 <h1><a class="anchor" id="autotoc_md4"></a>
-Basic Example</h1>
+Remarks</h1>
 <h2><a class="anchor" id="autotoc_md5"></a>
+Handle Ownership</h2>
+<p >If you instantiate a <code><a class="el" href="classMailslotClient.html" title="Represents a mailslot client and provides all the utilities related to it.">MailslotClient</a></code>/<code><a class="el" href="classMailslotServer.html" title="Represents a mailslot server and provides all the utilities related to them.">MailslotServer</a></code> class, the underlying Win32 handle's lifecycle will be tied to that class'. \ Any <code>FileStream</code> you create via the <code>GetFileStream</code> instance method won't have ownership of it since multiple can co-exist.</p>
+<p >You can use the <code>CreateAsFileStream</code> static class functions to get a <code>FileStream</code> that has ownership of the Win32 handle.</p>
+<h2><a class="anchor" id="autotoc_md6"></a>
+Thread Safety</h2>
+<p >...</p>
+<p ><br  />
+</p>
+<hr  />
+<h1><a class="anchor" id="autotoc_md8"></a>
+Basic Example</h1>
+<p >This section contains examples that should be enough to get you started.</p>
+<p >For more detailed examples, check the [???] page/section.</p>
+<h2><a class="anchor" id="autotoc_md9"></a>
 Client</h2>
-<h3><a class="anchor" id="autotoc_md6"></a>
-Simplified API</h3>
-<div class="fragment"><div class="line"><span class="keywordflow">try</span> {</div>
-<div class="line">    var mc = <span class="keyword">new</span> <a class="code hl_class" href="classMailslotClient.html">MailslotClient</a>(<span class="stringliteral">&quot;\\\\.\\mailslot\\test&quot;</span>);</div>
-<div class="line">    mc.Send(<span class="stringliteral">&quot;Hello world&quot;</span>, Encoding.ASCII);</div>
-<div class="line">} <span class="keywordflow">catch</span>(Exception e) {</div>
-<div class="line">    Console.Error.WriteLine(e.Message);</div>
+<h3><a class="anchor" id="autotoc_md10"></a>
+Simplified API *(Sync)*</h3>
+<div class="fragment"><div class="line"><span class="comment">// Sending to `\\.\mailslot\test123`</span></div>
+<div class="line">var client = <span class="keyword">new</span> <a class="code hl_class" href="classMailslotClient.html">MailslotClient</a>(<span class="keyword">null</span>, <span class="stringliteral">&quot;test123&quot;</span>, isAsync: <span class="keyword">false</span>)</div>
+<div class="line">client.<a class="code hl_function" href="classMailslotClient.html#ab25df4690f692934bad8849aa7c5d481">SendSync</a>(mailslotText);</div>
+<div class="ttc" id="aclassMailslotClient_html"><div class="ttname"><a href="classMailslotClient.html">MailslotClient</a></div><div class="ttdoc">Represents a mailslot client and provides all the utilities related to it.</div><div class="ttdef"><b>Definition:</b> MailslotClient.cs:18</div></div>
+<div class="ttc" id="aclassMailslotClient_html_ab25df4690f692934bad8849aa7c5d481"><div class="ttname"><a href="classMailslotClient.html#ab25df4690f692934bad8849aa7c5d481">MailslotClient.SendSync</a></div><div class="ttdeci">void SendSync(byte[] dataToSend)</div><div class="ttdef"><b>Definition:</b> MailslotClient.cs:171</div></div>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md11"></a>
+FileStream API *(Async+Sync)*</h3>
+<div class="fragment"><div class="line"><span class="keywordtype">bool</span> isAsync = <span class="keyword">true</span>;</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// This FileStream own the Win32 API handle</span></div>
+<div class="line">var fs = <a class="code hl_class" href="classMailslotClient.html">MailslotClient</a>.<a class="code hl_function" href="classMailslotClient.html#a8355973615039d285e30d7bdb8e5afb1">CreateAsFileStream</a>(</div>
+<div class="line">    <span class="stringliteral">&quot;\\\\.\\mailslot\\test123&quot;</span>, isAsync: isAsync</div>
+<div class="line">);</div>
+<div class="line"> </div>
+<div class="line"><span class="keywordtype">byte</span>[] data = Encoding.UTF8.GetBytes(<span class="stringliteral">&quot;Hello World !&quot;</span>);</div>
+<div class="line"> </div>
+<div class="line"><span class="keywordflow">if</span>(isAsync) {</div>
+<div class="line">    await fs.WriteAsync(data);</div>
+<div class="line">} <span class="keywordflow">else</span> {</div>
+<div class="line">    fs.Write(data, 0, data.Length);</div>
 <div class="line">}</div>
-<div class="ttc" id="aclassMailslotClient_html"><div class="ttname"><a href="classMailslotClient.html">MailslotClient</a></div><div class="ttdoc">Represents a mailslot server and provides all the utilities related to them.</div><div class="ttdef"><b>Definition:</b> MailslotClient.cs:18</div></div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md7"></a>
-FileStream API</h3>
-<div class="fragment"><div class="line"><span class="keywordflow">try</span> {</div>
-<div class="line">    var fs = <a class="code hl_class" href="classMailslotClient.html">MailslotClient</a>.<a class="code hl_function" href="classMailslotClient.html#a8355973615039d285e30d7bdb8e5afb1">CreateAsFileStream</a>(<span class="stringliteral">&quot;\\\\.\\mailslot\\test&quot;</span>);</div>
-<div class="line">    </div>
-<div class="line">    <span class="keywordtype">byte</span>[] bytes = Encoding.ASCII.GetBytes(<span class="stringliteral">&quot;Hello world&quot;</span>);</div>
-<div class="line">    </div>
-<div class="line">    client.Write(bytes, 0, bytes.Length);</div>
-<div class="line">    client.Flush();</div>
-<div class="line">} <span class="keywordflow">catch</span>(Exception e) {</div>
-<div class="line">    Console.Error.WriteLine(e.Message);</div>
-<div class="line">}</div>
-<div class="ttc" id="aclassMailslotClient_html_a8355973615039d285e30d7bdb8e5afb1"><div class="ttname"><a href="classMailslotClient.html#a8355973615039d285e30d7bdb8e5afb1">MailslotClient.CreateAsFileStream</a></div><div class="ttdeci">static FileStream CreateAsFileStream(string fullUncPath, int bufferSize=4096, bool isAsync=true, bool mustExist=true)</div><div class="ttdef"><b>Definition:</b> MailslotClient.cs:251</div></div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md8"></a>
+<div class="line"> </div>
+<div class="line"><span class="comment">// May need to be moved around.</span></div>
+<div class="line">fs.Flush(<span class="keyword">true</span>);</div>
+<div class="ttc" id="aclassMailslotClient_html_a8355973615039d285e30d7bdb8e5afb1"><div class="ttname"><a href="classMailslotClient.html#a8355973615039d285e30d7bdb8e5afb1">MailslotClient.CreateAsFileStream</a></div><div class="ttdeci">static FileStream CreateAsFileStream(string fullUncPath, int bufferSize=4096, bool isAsync=true, bool mustExist=true)</div><div class="ttdef"><b>Definition:</b> MailslotClient.cs:309</div></div>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md12"></a>
 Server</h2>
-<h3><a class="anchor" id="autotoc_md9"></a>
+<h3><a class="anchor" id="autotoc_md13"></a>
 Simplified API</h3>
-<div class="fragment"><div class="line"><span class="comment">// TODO</span></div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md10"></a>
-FileStream API</h3>
-<div class="fragment"><div class="line"><span class="comment">// TODO</span></div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md11"></a>
+<div class="fragment"><div class="line"><span class="comment">// TOOD: Implement this</span></div>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md14"></a>
+FileStream API *(Blocking)*</h3>
+<div class="fragment"><div class="line"><span class="keywordtype">string</span> mailslotPath = Guid.NewGuid().ToString();</div>
+<div class="line">uint mailslotSize = 1024;</div>
+<div class="line"><span class="keywordtype">byte</span>[] buffer = <span class="keyword">new</span> <span class="keywordtype">byte</span>[mailslotSize];</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// Server that waits forever</span></div>
+<div class="line">Console.WriteLine($<span class="stringliteral">&quot;Starting server on `\\\\.\\mailslot\\{mailslotPath}`&quot;</span>);</div>
+<div class="line">var server = <span class="keyword">new</span> <a class="code hl_class" href="classMailslotServer.html">MailslotServer</a>(</div>
+<div class="line">    <span class="keyword">null</span>, mailslotPath, mailslotSize,</div>
+<div class="line">    <a class="code hl_class" href="classMailslotServer.html">MailslotServer</a>.<a class="code hl_variable" href="classMailslotServer.html#aa8adf694fcaf0b68d0101287249ab6e4">MAILSLOT_WAIT_FOREVER</a></div>
+<div class="line">);</div>
+<div class="line"> </div>
+<div class="line">Console.WriteLine($<span class="stringliteral">&quot;Waiting for data...&quot;</span>);</div>
+<div class="line"><span class="keywordtype">int</span> bytesRead = server.GetFileStream().Read(buffer, 0, buffer.Length);</div>
+<div class="line"> </div>
+<div class="line"><span class="keywordflow">if</span> (bytesRead &gt; 0) {</div>
+<div class="line">    Console.WriteLine($<span class="stringliteral">&quot;Received: `{Encoding.ASCII.GetString(buffer)}`&quot;</span>);</div>
+<div class="line">} <span class="keywordflow">else</span> {</div>
+<div class="line">    Console.Error.WriteLine(<span class="stringliteral">&quot;Couldn&#39;t read from the mailslot !&quot;</span>);</div>
+<div class="line">    <span class="keywordflow">return</span> 1;</div>
+<div class="line">}</div>
+<div class="ttc" id="aclassMailslotServer_html"><div class="ttname"><a href="classMailslotServer.html">MailslotServer</a></div><div class="ttdoc">Represents a mailslot server and provides all the utilities related to them.</div><div class="ttdef"><b>Definition:</b> MailslotServer.cs:14</div></div>
+<div class="ttc" id="aclassMailslotServer_html_aa8adf694fcaf0b68d0101287249ab6e4"><div class="ttname"><a href="classMailslotServer.html#aa8adf694fcaf0b68d0101287249ab6e4">MailslotServer.MAILSLOT_WAIT_FOREVER</a></div><div class="ttdeci">const uint MAILSLOT_WAIT_FOREVER</div><div class="ttdoc">Waits forever for a message.</div><div class="ttdef"><b>Definition:</b> MailslotServer.cs:32</div></div>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md15"></a>
+FileStream API *(Polling)*</h3>
+<div class="fragment"><div class="line"><span class="comment">// TOOD: Create this example</span></div>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md16"></a>
+Manual checking *(Not recommended)*</h3>
+<div class="fragment"><div class="line"><span class="comment">// TOOD: Create this example</span></div>
+</div><!-- fragment --><p ><br  />
+</p>
+<hr  />
+<h1><a class="anchor" id="autotoc_md18"></a>
 Cloning</h1>
 <p >Use this command to clone the repository and its submodules: </p><div class="fragment"><div class="line">git clone --recurse-submodules https://github.com/aziascreations/DotNet-Win32-Mailslot.git</div>
 </div><!-- fragment --><p >If you forgot the submodules, use this command: </p><div class="fragment"><div class="line">git submodule update --init --recursive</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md12"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md19"></a>
 Building</h1>
 <ol type="1">
 <li>Clone the repository</li>
@@ -181,7 +242,7 @@ Building</h1>
 <li>Package the project: \ <code>dotnet pack</code></li>
 <li>Check the <a href="NibblePoker.Win32.Mailslot/bin/Release">NibblePoker.Win32.Mailslot/bin/Release</a> folder</li>
 </ol>
-<h1><a class="anchor" id="autotoc_md13"></a>
+<h1><a class="anchor" id="autotoc_md20"></a>
 License</h1>
 <p >The code in this repository is licensed under <a href="https://github.com/aziascreations/DotNet-Win32-Mailslot/blob/master/LICENSE">CC0 1.0 Universal (CC0 1.0) (Public Domain)</a>.</p>
 <p >The <a href="https://github.com/jothepro/doxygen-awesome-css">doxygen-awesome-css</a> repository is used as a submodule for Doxygen and is licensed under the <a href="https://github.com/jothepro/doxygen-awesome-css/blob/main/LICENSE">MIT license</a>. </p>

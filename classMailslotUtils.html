@@ -110,9 +110,9 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:aa327f1ac82d9a355f1948a40b5c2ec2c"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMailslotUtils.html#aa327f1ac82d9a355f1948a40b5c2ec2c">IsUncPathPartValid</a> (string uncPathPart)</td></tr>
 <tr class="memdesc:aa327f1ac82d9a355f1948a40b5c2ec2c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if the path part of a UNC path is valid.   <a href="classMailslotUtils.html#aa327f1ac82d9a355f1948a40b5c2ec2c">More...</a><br /></td></tr>
 <tr class="separator:aa327f1ac82d9a355f1948a40b5c2ec2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad939b669a73e68ec9582f7b73aff2546"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMailslotUtils.html#ad939b669a73e68ec9582f7b73aff2546">UsUncPathValid</a> (string uncFullPath)</td></tr>
-<tr class="memdesc:ad939b669a73e68ec9582f7b73aff2546"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if the given full UNC path is valid.   <a href="classMailslotUtils.html#ad939b669a73e68ec9582f7b73aff2546">More...</a><br /></td></tr>
-<tr class="separator:ad939b669a73e68ec9582f7b73aff2546"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a27baa810540e3b5d157eeefd9d3cf0e7"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMailslotUtils.html#a27baa810540e3b5d157eeefd9d3cf0e7">IsUncPathValid</a> (string uncFullPath)</td></tr>
+<tr class="memdesc:a27baa810540e3b5d157eeefd9d3cf0e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if the given full UNC path is valid.   <a href="classMailslotUtils.html#a27baa810540e3b5d157eeefd9d3cf0e7">More...</a><br /></td></tr>
+<tr class="separator:a27baa810540e3b5d157eeefd9d3cf0e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aacd924e5e6a97be97c2bc0cc51d81f30"><td class="memItemLeft" align="right" valign="top">static string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMailslotUtils.html#aacd924e5e6a97be97c2bc0cc51d81f30">ComposeMailslotUncPath</a> (string uncHostPart, string uncPathPart, bool checkCombinedPath=true)</td></tr>
 <tr class="memdesc:aacd924e5e6a97be97c2bc0cc51d81f30"><td class="mdescLeft">&#160;</td><td class="mdescRight">Attempts to compose a mailslot UNC path using the given host and path.<br  />
  Format: <code>\{host}\mailslot\{path}</code>   <a href="classMailslotUtils.html#aacd924e5e6a97be97c2bc0cc51d81f30">More...</a><br /></td></tr>
@@ -256,6 +256,41 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a27baa810540e3b5d157eeefd9d3cf0e7" name="a27baa810540e3b5d157eeefd9d3cf0e7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a27baa810540e3b5d157eeefd9d3cf0e7">&#9670;&#160;</a></span>IsUncPathValid()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool MailslotUtils.IsUncPathValid </td>
+          <td>(</td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>uncFullPath</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Checks if the given full UNC path is valid.  </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">uncFullPath</td><td>Full UNC path to check.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if it is valid, <code>false</code> otherwise.</dd></dl>
+
+</div>
+</div>
 <a id="a5a8f1b80632f87eb7609a06b16089bc2" name="a5a8f1b80632f87eb7609a06b16089bc2"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a5a8f1b80632f87eb7609a06b16089bc2">&#9670;&#160;</a></span>TryComposeMailslotUncPath()</h2>
 
@@ -321,41 +356,6 @@ Static Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-
-</div>
-</div>
-<a id="ad939b669a73e68ec9582f7b73aff2546" name="ad939b669a73e68ec9582f7b73aff2546"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad939b669a73e68ec9582f7b73aff2546">&#9670;&#160;</a></span>UsUncPathValid()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static bool MailslotUtils.UsUncPathValid </td>
-          <td>(</td>
-          <td class="paramtype">string&#160;</td>
-          <td class="paramname"><em>uncFullPath</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Checks if the given full UNC path is valid.  </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">uncFullPath</td><td>Full UNC path to check.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd><code>true</code> if it is valid, <code>false</code> otherwise.</dd></dl>
 
 </div>
 </div>

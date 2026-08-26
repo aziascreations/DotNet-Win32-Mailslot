@@ -28,20 +28,25 @@ var NAVTREE =
     [ ".NET - Win32 Mailslot", "index.html", [
       [ "Features", "index.html#autotoc_md1", null ],
       [ "Requirements", "index.html#autotoc_md2", null ],
-      [ "Documentation", "index.html#autotoc_md3", null ],
-      [ "Basic Example", "index.html#autotoc_md4", [
-        [ "Client", "index.html#autotoc_md5", [
-          [ "Simplified API", "index.html#autotoc_md6", null ],
-          [ "FileStream API", "index.html#autotoc_md7", null ]
+      [ "Remarks", "index.html#autotoc_md4", [
+        [ "Handle Ownership", "index.html#autotoc_md5", null ],
+        [ "Thread Safety", "index.html#autotoc_md6", null ]
+      ] ],
+      [ "Basic Example", "index.html#autotoc_md8", [
+        [ "Client", "index.html#autotoc_md9", [
+          [ "Simplified API *(Sync)*", "index.html#autotoc_md10", null ],
+          [ "FileStream API *(Async+Sync)*", "index.html#autotoc_md11", null ]
         ] ],
-        [ "Server", "index.html#autotoc_md8", [
-          [ "Simplified API", "index.html#autotoc_md9", null ],
-          [ "FileStream API", "index.html#autotoc_md10", null ]
+        [ "Server", "index.html#autotoc_md12", [
+          [ "Simplified API", "index.html#autotoc_md13", null ],
+          [ "FileStream API *(Blocking)*", "index.html#autotoc_md14", null ],
+          [ "FileStream API *(Polling)*", "index.html#autotoc_md15", null ],
+          [ "Manual checking *(Not recommended)*", "index.html#autotoc_md16", null ]
         ] ]
       ] ],
-      [ "Cloning", "index.html#autotoc_md11", null ],
-      [ "Building", "index.html#autotoc_md12", null ],
-      [ "License", "index.html#autotoc_md13", null ]
+      [ "Cloning", "index.html#autotoc_md18", null ],
+      [ "Building", "index.html#autotoc_md19", null ],
+      [ "License", "index.html#autotoc_md20", null ]
     ] ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],

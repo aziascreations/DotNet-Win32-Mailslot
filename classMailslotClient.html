@@ -101,7 +101,7 @@ $(document).ready(function(){initNavTree('classMailslotClient.html',''); initRes
 </div><!--header-->
 <div class="contents">
 
-<p>Represents a mailslot server and provides all the utilities related to them.   
+<p>Represents a mailslot client and provides all the utilities related to it.   
  <a href="classMailslotClient.html#details">More...</a></p>
 <div class="dynheader">
 Inheritance diagram for MailslotClient:</div>
@@ -118,11 +118,14 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a1ebbfabcb7135af6cc3cd881b455c250"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMailslotClient.html#a1ebbfabcb7135af6cc3cd881b455c250">MailslotClient</a> (string? host, string mailslotPath, bool isAsync=true, bool mustExist=true)</td></tr>
 <tr class="memdesc:a1ebbfabcb7135af6cc3cd881b455c250"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a mailslot client connected to the given host's mailslot at the given path.   <a href="classMailslotClient.html#a1ebbfabcb7135af6cc3cd881b455c250">More...</a><br /></td></tr>
 <tr class="separator:a1ebbfabcb7135af6cc3cd881b455c250"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a28751783ae97995d143f4521508350bc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMailslotClient.html#a28751783ae97995d143f4521508350bc">Send</a> (string textToSend, Encoding? encoding)</td></tr>
-<tr class="memdesc:a28751783ae97995d143f4521508350bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sends a given bit of text to the mailslot server.   <a href="classMailslotClient.html#a28751783ae97995d143f4521508350bc">More...</a><br /></td></tr>
-<tr class="separator:a28751783ae97995d143f4521508350bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad5b53498c8bd12bf7f236ab4f84d493b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMailslotClient.html#ad5b53498c8bd12bf7f236ab4f84d493b">Send</a> (byte[] dataToSend)</td></tr>
-<tr class="separator:ad5b53498c8bd12bf7f236ab4f84d493b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab25df4690f692934bad8849aa7c5d481"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMailslotClient.html#ab25df4690f692934bad8849aa7c5d481">SendSync</a> (byte[] dataToSend)</td></tr>
+<tr class="separator:ab25df4690f692934bad8849aa7c5d481"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2f7de5ea9e57f7eed4d8044f86ba3ce7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMailslotClient.html#a2f7de5ea9e57f7eed4d8044f86ba3ce7">SendSync</a> (string textToSend, Encoding? encoding)</td></tr>
+<tr class="memdesc:a2f7de5ea9e57f7eed4d8044f86ba3ce7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sends a given bit of text to the mailslot server.   <a href="classMailslotClient.html#a2f7de5ea9e57f7eed4d8044f86ba3ce7">More...</a><br /></td></tr>
+<tr class="separator:a2f7de5ea9e57f7eed4d8044f86ba3ce7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa852ab6ebadcb92a3ebfbc627a05d90c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMailslotClient.html#aa852ab6ebadcb92a3ebfbc627a05d90c">SendSync</a> (string textToSend)</td></tr>
+<tr class="memdesc:aa852ab6ebadcb92a3ebfbc627a05d90c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sends a given bit of text to the mailslot server.   <a href="classMailslotClient.html#aa852ab6ebadcb92a3ebfbc627a05d90c">More...</a><br /></td></tr>
+<tr class="separator:aa852ab6ebadcb92a3ebfbc627a05d90c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acb0a4fdd73e8a5ad0df371539aa9e8e9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMailslotClient.html#acb0a4fdd73e8a5ad0df371539aa9e8e9">Dispose</a> ()</td></tr>
 <tr class="separator:acb0a4fdd73e8a5ad0df371539aa9e8e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1b48e71374d21e095020b9d72d0bf0f8"><td class="memItemLeft" align="right" valign="top">FileStream&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMailslotClient.html#a1b48e71374d21e095020b9d72d0bf0f8">GetFileStream</a> (int bufferSize=4096)</td></tr>
@@ -145,7 +148,7 @@ Properties</h2></td></tr>
 <tr class="separator:ab19a9c2b2686a923c6512dc4385f7867"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p >Represents a mailslot server and provides all the utilities related to them.  </p>
+<div class="textblock"><p >Represents a mailslot client and provides all the utilities related to it.  </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a84338161daded4d56088bfa9623d87c8" name="a84338161daded4d56088bfa9623d87c8"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a84338161daded4d56088bfa9623d87c8">&#9670;&#160;</a></span>MailslotClient() <span class="overload">[1/2]</span></h2>
@@ -473,12 +476,12 @@ Properties</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd></dd></dl>
-<p >The returned FileStream doesn't own the SafeFileHandle, the <a class="el" href="classMailslotClient.html" title="Represents a mailslot server and provides all the utilities related to them.">MailslotClient</a> instance does. </p>
+<p >The returned FileStream doesn't own the SafeFileHandle, the <a class="el" href="classMailslotClient.html" title="Represents a mailslot client and provides all the utilities related to it.">MailslotClient</a> instance does. </p>
 
 </div>
 </div>
-<a id="ad5b53498c8bd12bf7f236ab4f84d493b" name="ad5b53498c8bd12bf7f236ab4f84d493b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad5b53498c8bd12bf7f236ab4f84d493b">&#9670;&#160;</a></span>Send() <span class="overload">[1/2]</span></h2>
+<a id="ab25df4690f692934bad8849aa7c5d481" name="ab25df4690f692934bad8849aa7c5d481"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab25df4690f692934bad8849aa7c5d481">&#9670;&#160;</a></span>SendSync() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -487,7 +490,7 @@ Properties</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void MailslotClient.Send </td>
+          <td class="memname">void MailslotClient.SendSync </td>
           <td>(</td>
           <td class="paramtype">byte[]&#160;</td>
           <td class="paramname"><em>dataToSend</em></td><td>)</td>
@@ -511,16 +514,19 @@ Properties</h2></td></tr>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
     <tr><td class="paramname">ArgumentNullException</td><td>Thrown if the data to send is <code>null</code>. </td></tr>
+    <tr><td class="paramname">InvalidOperationException</td><td>Thrown when used on an async client. </td></tr>
+    <tr><td class="paramname">Win32Exception</td><td>If there was an error while writing to the mailslot. </td></tr>
   </table>
   </dd>
 </dl>
 <p >This function will not handles cases where the server allows a smaller message than what you're sending.<br  />
- You should implement support for this behavious on your own if needed. </p>
+ You should implement support for this behaviour on your own if needed. </p>
+<p >This function doens't handle async <a class="el" href="classMailslotClient.html" title="Represents a mailslot client and provides all the utilities related to it.">MailslotClient</a> since we're not managing complex structures for Win32 API calls yet. </p>
 
 </div>
 </div>
-<a id="a28751783ae97995d143f4521508350bc" name="a28751783ae97995d143f4521508350bc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a28751783ae97995d143f4521508350bc">&#9670;&#160;</a></span>Send() <span class="overload">[2/2]</span></h2>
+<a id="aa852ab6ebadcb92a3ebfbc627a05d90c" name="aa852ab6ebadcb92a3ebfbc627a05d90c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa852ab6ebadcb92a3ebfbc627a05d90c">&#9670;&#160;</a></span>SendSync() <span class="overload">[2/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -529,7 +535,52 @@ Properties</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void MailslotClient.Send </td>
+          <td class="memname">void MailslotClient.SendSync </td>
+          <td>(</td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>textToSend</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sends a given bit of text to the mailslot server.  </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">textToSend</td><td>The bit of text to send. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">ArgumentNullException</td><td>Thrown if the data to send is <code>null</code>. </td></tr>
+    <tr><td class="paramname">InvalidOperationException</td><td>Thrown when used on an async client. </td></tr>
+    <tr><td class="paramname">Win32Exception</td><td>If there was an error while writing to the mailslot. </td></tr>
+  </table>
+  </dd>
+</dl>
+<p >This function will not handles cases where the server allows a smaller message than what you're sending.<br  />
+ You should implement support for this behavious on your own if needed. </p>
+<p >This function doens't handle async <a class="el" href="classMailslotClient.html" title="Represents a mailslot client and provides all the utilities related to it.">MailslotClient</a> since we're not managing complex structures for Win32 API calls yet. </p>
+
+</div>
+</div>
+<a id="a2f7de5ea9e57f7eed4d8044f86ba3ce7" name="a2f7de5ea9e57f7eed4d8044f86ba3ce7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2f7de5ea9e57f7eed4d8044f86ba3ce7">&#9670;&#160;</a></span>SendSync() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void MailslotClient.SendSync </td>
           <td>(</td>
           <td class="paramtype">string&#160;</td>
           <td class="paramname"><em>textToSend</em>, </td>
@@ -564,11 +615,14 @@ Properties</h2></td></tr>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
     <tr><td class="paramname">ArgumentNullException</td><td>Thrown if the data to send is <code>null</code>. </td></tr>
+    <tr><td class="paramname">InvalidOperationException</td><td>Thrown when used on an async client. </td></tr>
+    <tr><td class="paramname">Win32Exception</td><td>If there was an error while writing to the mailslot. </td></tr>
   </table>
   </dd>
 </dl>
 <p >This function will not handles cases where the server allows a smaller message than what you're sending.<br  />
  You should implement support for this behavious on your own if needed. </p>
+<p >This function doens't handle async <a class="el" href="classMailslotClient.html" title="Represents a mailslot client and provides all the utilities related to it.">MailslotClient</a> since we're not managing complex structures for Win32 API calls yet. </p>
 
 </div>
 </div>

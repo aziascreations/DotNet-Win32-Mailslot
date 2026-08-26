@@ -121,8 +121,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a614f524e3db8cb764c4b2ed92925054a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6ace30f9d6f637b2bc34c516c2d399a5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classMailslotServer.html">MailslotServer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMailslotServer.html#a6ace30f9d6f637b2bc34c516c2d399a5">SetReadTimeoutMs</a> (uint readTimeoutMs)</td></tr>
 <tr class="separator:a6ace30f9d6f637b2bc34c516c2d399a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac56eaee877bab0e64f02893a8f5674d8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMailslotServer.html#ac56eaee877bab0e64f02893a8f5674d8">GetInfo</a> (out uint maxMessageSize, out uint nextSize, out uint messageCount, out uint readTimeout)</td></tr>
-<tr class="separator:ac56eaee877bab0e64f02893a8f5674d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3bb68c2cb81517d042355c5c98df21a9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMailslotServer.html#a3bb68c2cb81517d042355c5c98df21a9">GetInfo</a> (out uint maxMessageSize, out uint nextSize, out uint messageCount, out uint readTimeout)</td></tr>
+<tr class="separator:a3bb68c2cb81517d042355c5c98df21a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1c6ba7a1da72f1b03b75e1870cb9da48"><td class="memItemLeft" align="right" valign="top">FileStream&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMailslotServer.html#a1c6ba7a1da72f1b03b75e1870cb9da48">GetFileStream</a> (int bufferSize=4096)</td></tr>
 <tr class="separator:a1c6ba7a1da72f1b03b75e1870cb9da48"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aafe1d504108616c1895cdd5334a20eda"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMailslotServer.html#aafe1d504108616c1895cdd5334a20eda">Dispose</a> ()</td></tr>
@@ -585,8 +585,8 @@ Properties</h2></td></tr>
 
 </div>
 </div>
-<a id="ac56eaee877bab0e64f02893a8f5674d8" name="ac56eaee877bab0e64f02893a8f5674d8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac56eaee877bab0e64f02893a8f5674d8">&#9670;&#160;</a></span>GetInfo()</h2>
+<a id="a3bb68c2cb81517d042355c5c98df21a9" name="a3bb68c2cb81517d042355c5c98df21a9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3bb68c2cb81517d042355c5c98df21a9">&#9670;&#160;</a></span>GetInfo()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -595,7 +595,7 @@ Properties</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void MailslotServer.GetInfo </td>
+          <td class="memname">bool MailslotServer.GetInfo </td>
           <td>(</td>
           <td class="paramtype">out uint&#160;</td>
           <td class="paramname"><em>maxMessageSize</em>, </td>
@@ -641,6 +641,7 @@ Properties</h2></td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if we could get info, <code>false</code> otherwise. </dd></dl>
 
 </div>
 </div>
@@ -692,6 +693,7 @@ Properties</h2></td></tr>
 </div><div class="memdoc">
 
 <p>There is no next message.  </p>
+<p >The value is <code>0xFFFFFFFF</code> instead of <code>-1</code> due to the <code>((DWORD) -1)</code> typecast that is not supported in C#. </p>
 
 </div>
 </div>
@@ -716,6 +718,7 @@ Properties</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Waits forever for a message.  </p>
+<p >The value is <code>0xFFFFFFFF</code> instead of <code>-1</code> due to the <code>((DWORD) -1)</code> typecast that is not supported in C#. </p>
 
 </div>
 </div>
@@ -766,7 +769,7 @@ Properties</h2></td></tr>
 </div><div class="memdoc">
 
 <p>???  </p>
-<p >You should use <a class="el" href="classMailslotServer.html#ac56eaee877bab0e64f02893a8f5674d8">MailslotServer.GetInfo</a> if you're reading more than 1 property in a given work unit. </p>
+<p >You should use <a class="el" href="classMailslotServer.html#a3bb68c2cb81517d042355c5c98df21a9">MailslotServer.GetInfo</a> if you're reading more than 1 property in a given work unit. </p>
 
 </div>
 </div>
@@ -791,7 +794,7 @@ Properties</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Represents the number of messages queued in the mailslot.  </p>
-<p >You should use <a class="el" href="classMailslotServer.html#ac56eaee877bab0e64f02893a8f5674d8">MailslotServer.GetInfo</a> if you're reading more than 1 property in a given work unit. </p>
+<p >You should use <a class="el" href="classMailslotServer.html#a3bb68c2cb81517d042355c5c98df21a9">MailslotServer.GetInfo</a> if you're reading more than 1 property in a given work unit. </p>
 
 </div>
 </div>
@@ -816,7 +819,7 @@ Properties</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Represents the size of the next message in the mailslot queue.  </p>
-<p >You should use <a class="el" href="classMailslotServer.html#ac56eaee877bab0e64f02893a8f5674d8">MailslotServer.GetInfo</a> if you're reading more than 1 property in a given work unit. </p>
+<p >You should use <a class="el" href="classMailslotServer.html#a3bb68c2cb81517d042355c5c98df21a9">MailslotServer.GetInfo</a> if you're reading more than 1 property in a given work unit. </p>
 
 </div>
 </div>
@@ -841,7 +844,7 @@ Properties</h2></td></tr>
 </div><div class="memdoc">
 
 <p>???  </p>
-<p >You should use <a class="el" href="classMailslotServer.html#ac56eaee877bab0e64f02893a8f5674d8">MailslotServer.GetInfo</a> if you're reading more than 1 property in a given work unit. </p>
+<p >You should use <a class="el" href="classMailslotServer.html#a3bb68c2cb81517d042355c5c98df21a9">MailslotServer.GetInfo</a> if you're reading more than 1 property in a given work unit. </p>
 
 </div>
 </div>
