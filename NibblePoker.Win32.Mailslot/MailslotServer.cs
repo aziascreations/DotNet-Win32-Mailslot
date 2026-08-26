@@ -5,7 +5,6 @@ using System.IO;
 using System.Runtime.InteropServices;
 
 using static NibblePoker.Win32.Mailslot.MailslotBindings;
-using static NibblePoker.Win32.Mailslot.MailslotUtils;
 
 namespace NibblePoker.Win32.Mailslot;
 
@@ -22,6 +21,9 @@ public class MailslotServer : IDisposable {
     /// Waits forever for a message.
     /// </summary>
     public const uint MAILSLOT_WAIT_FOREVER = MailslotConstants.MAILSLOT_WAIT_FOREVER;
+
+
+    #region Properties
 
     /// <summary>
     /// UNC path to which the client is connected.<br/>
@@ -75,7 +77,7 @@ public class MailslotServer : IDisposable {
     /// </summary>
     public uint NextMessageSize {
         get {
-            if (GetMailslotInfo(MailslotHandle, out uint dwReturnValue, out _, out _, out _)) {
+            if (GetMailslotInfo(MailslotHandle, out _, out uint dwReturnValue, out _, out _)) {
                 return dwReturnValue;
             } else {
                 throw new Win32Exception(Marshal.GetLastWin32Error());
@@ -83,7 +85,37 @@ public class MailslotServer : IDisposable {
         }
     }
 
+    #endregion
+
+
+    // Not set to private to enable some Win32 API based tests.
     internal SafeFileHandle MailslotHandle;
+
+    private bool _disposed = false;
+    private bool _ownsHandle;
+
+
+    #region Constructors
+
+    internal MailslotServer(string fullUncPath, uint maxMessageSize, uint readTimeoutMs, bool ownsHandle) {
+        if (!PathIsUNC(fullUncPath)) {
+            throw new ArgumentException($"The UNC path `{fullUncPath}` is invalid !", nameof(fullUncPath));
+        }
+        FullPath = fullUncPath;
+
+        MailslotHandle = CreateMailslot(fullUncPath, maxMessageSize, readTimeoutMs, IntPtr.Zero);
+        if (MailslotHandle.IsInvalid) {
+            throw new Win32Exception(Marshal.GetLastWin32Error());
+        }
+
+        _ownsHandle = ownsHandle;
+    }
+
+    internal MailslotServer(string? uncDomain, string mailslotPath, uint maxMessageSize, uint readTimeoutMs, bool ownsHandle) :
+        this(
+            $"\\\\{(uncDomain != null ? uncDomain : ".")}\\mailslot\\{mailslotPath}",
+            maxMessageSize, readTimeoutMs, ownsHandle
+        ) { }
 
     /// <summary>
     ///     Creates a mailslot server on the given UNC path.
@@ -99,18 +131,11 @@ public class MailslotServer : IDisposable {
     ///     ??? <br/>
     ///     <see href="https://learn.microsoft.com/en-us/windows/win32/debug/system-error-codes"/>
     /// </exception>
-    public MailslotServer(string fullUncPath, uint maxMessageSize, uint readTimeoutMs) {
-        if (!PathIsUNC(fullUncPath)) {
-            throw new ArgumentException($"The UNC path `{fullUncPath}` is invalid !", nameof(fullUncPath));
-        }
-
-        FullPath = fullUncPath;
-
-        MailslotHandle = CreateMailslot(fullUncPath, maxMessageSize, readTimeoutMs, IntPtr.Zero);
-        if (MailslotHandle.IsInvalid) {
-            throw new Win32Exception(Marshal.GetLastWin32Error());
-        }
-    }
+    /// <remarks>
+    ///     [Note anbout who is the owner !]
+    /// </remarks>
+    public MailslotServer(string fullUncPath, uint maxMessageSize, uint readTimeoutMs) : 
+        this(fullUncPath, maxMessageSize, readTimeoutMs, ownsHandle: true) { }
 
     /// <summary>
     ///     Creates a mailslot server on the given UNC domain at the given mailslot path.
@@ -130,25 +155,17 @@ public class MailslotServer : IDisposable {
     ///     ??? <br/>
     ///     <see href="https://learn.microsoft.com/en-us/windows/win32/debug/system-error-codes"/>
     /// </exception>
-    public MailslotServer(string? uncDomain, string mailslotPath, uint maxMessageSize, uint readTimeoutMs) {
-        if (!IsValidUNCPath(mailslotPath)) {
-            throw new ArgumentException($"Invalid mailslot path value ! ({mailslotPath})", nameof(mailslotPath));
-        }
+    /// <remarks>
+    ///     [Note anbout who is the owner !]
+    /// </remarks>
+    public MailslotServer(string? uncDomain, string mailslotPath, uint maxMessageSize, uint readTimeoutMs) :
+        this(
+            $"\\\\{(uncDomain != null ? uncDomain : ".")}\\mailslot\\{mailslotPath}",
+            maxMessageSize, readTimeoutMs, ownsHandle: true
+        ) { }
 
-        if(uncDomain == null) {
-            uncDomain = ".";
-        }
+    #endregion
 
-        FullPath = $"\\\\{uncDomain}\\mailslot\\{mailslotPath}";
-        if (!PathIsUNC(FullPath)) {
-            throw new ArgumentException("Invalid combination of UNC domain and mailslot path values !");
-        }
-
-        MailslotHandle = CreateMailslot(FullPath, maxMessageSize, readTimeoutMs, IntPtr.Zero);
-        if (MailslotHandle.IsInvalid) {
-            throw new Win32Exception(Marshal.GetLastWin32Error());
-        }
-    }
 
     public MailslotServer SetReadTimeoutMs(uint readTimeoutMs) {
         ReadTimeoutMs = readTimeoutMs;
@@ -167,18 +184,30 @@ public class MailslotServer : IDisposable {
     ///     The returned FileStream doesn't own the <see cref="SafeFileHandle"/>, the <see cref="MailslotServer"/> instance does.
     /// </remarks>
     public FileStream GetFileStream(int bufferSize = 4096) {
-        //var a = new FileStream(MailslotHandle, FileAccess.Read, bufferSize, true, ownsHandle: false);
-        return new FileStream(MailslotHandle, FileAccess.Read, bufferSize, true);
+        return new FileStream(
+             new SafeFileHandle(MailslotHandle.DangerousGetHandle(), ownsHandle: false),
+            FileAccess.Read, bufferSize, true
+        );
     }
 
+    /// <inheritdoc/>
     public void Dispose() {
-        if (MailslotHandle.IsInvalid) {
-            throw new Win32Exception(Marshal.GetLastWin32Error());
+        if (_disposed) {
+            return;
+        }
+        _disposed = true;
+
+        if(_ownsHandle) {
+            if (!MailslotHandle.IsInvalid && !MailslotHandle.IsClosed) {
+                MailslotHandle.Dispose();
+            }
         }
 
-        MailslotHandle.Close();
         GC.SuppressFinalize(this);
     }
+
+
+    #region Class methods
 
     /// <summary>
     ///     Creates a mailslot server and returns its <see cref="FileStream"/> directly.
@@ -191,8 +220,18 @@ public class MailslotServer : IDisposable {
     ///     The default buffer size is 4096.
     /// </param>
     /// <returns></returns>
+    /// <remarks>
+    ///     The returned FileStream owns the relevant <see cref="SafeFileHandle"/>.
+    /// </remarks>
     public static FileStream CreateAsFileStream(string fullUncPath, uint maxMessageSize, uint readTimeoutMs, int bufferSize = 4096) {
-        return new MailslotServer(fullUncPath, maxMessageSize, readTimeoutMs).GetFileStream(bufferSize);
+        using var ms = new MailslotServer(fullUncPath, maxMessageSize, readTimeoutMs, ownsHandle: false);
+
+        // Creates a FileStream that will take ownership of the SafeFileHandle.
+        // It won't get closed in `MailslotServer.Dispose`.
+        return new FileStream(
+            ms.MailslotHandle,
+            FileAccess.Read, bufferSize, true
+        );
     }
 
     /// <summary>
@@ -213,8 +252,18 @@ public class MailslotServer : IDisposable {
     ///     The default buffer size is 4096.
     /// </param>
     /// <returns></returns>
+    /// <remarks>
+    ///     The returned FileStream owns the relevant <see cref="SafeFileHandle"/>.
+    /// </remarks>
     public static FileStream CreateAsFileStream(string? uncDomain, string mailslotPath, uint maxMessageSize, uint readTimeoutMs, int bufferSize = 4096) {
-        return new MailslotServer(uncDomain, mailslotPath, maxMessageSize, readTimeoutMs).GetFileStream(bufferSize);
+        using var ms = new MailslotServer(uncDomain, mailslotPath, maxMessageSize, readTimeoutMs, ownsHandle: false);
+
+        // Creates a FileStream that will take ownership of the SafeFileHandle.
+        // It won't get closed in `MailslotServer.Dispose`.
+        return new FileStream(
+            ms.MailslotHandle,
+            FileAccess.Read, bufferSize, true
+        );
     }
 
     /// <summary>
@@ -235,4 +284,7 @@ public class MailslotServer : IDisposable {
     public static bool ExistsAt(string host, string path) {
         return ExistsAt($"\\\\{host}\\mailslot\\{path}");
     }
+
+    #endregion
+
 }

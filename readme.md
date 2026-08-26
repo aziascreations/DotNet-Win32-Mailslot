@@ -13,13 +13,16 @@ A simple library that exposes classes to interact with mailslots in a safe and .
 -->
 
 ## Features
+* ???
+  * [FileStream]
+  * [SimplifiedApi]
 * Easy to use, lightweight and 'to-the-point' philosophy
   * No unnecessary types, classes, procedures and whatnot
   * No dependencies attached
 * Supports modern developer QoL
   * ~~Fully compatible with [Microsoft.DotNet.ILCompiler](https://www.nuget.org/packages/Microsoft.DotNet.ILCompiler/)~~
   * Nullable annotations
-  * ~~Fully documented~~
+  * Fully documented
 
 
 ## Requirements
@@ -36,19 +39,45 @@ Go to [aziascreations.github.io/DotNet-Win32-Mailslot/](https://aziascreations.g
 documentation.
 
 
-## Building
-Please refer to the [building.md](building.md) file for more information.
-
-
 ## Basic Example
 
+### Client
 
-~~The following example shows you how to declare 2 options and how to parse and use the launch arguments.~~
+#### Simplified API
+```csharp
+try {
+	var mc = new MailslotClient("\\\\.\\mailslot\\test");
+	mc.Send("Hello world", Encoding.ASCII);
+} catch(Exception e) {
+	Console.Error.WriteLine(e.Message);
+}
+```
 
+#### FileStream API
+```csharp
+try {
+	var fs = MailslotClient.CreateAsFileStream("\\\\.\\mailslot\\test");
+	
+	byte[] bytes = Encoding.ASCII.GetBytes("Hello world");
+	
+	client.Write(bytes, 0, bytes.Length);
+	client.Flush();
+} catch(Exception e) {
+	Console.Error.WriteLine(e.Message);
+}
+```
+
+### Server
+
+#### Simplified API
 ```csharp
 // TODO
 ```
 
+#### FileStream API
+```csharp
+// TODO
+```
 
 
 ## Cloning
@@ -61,6 +90,17 @@ If you forgot the submodules, use this command:
 ```shell
 git submodule update --init --recursive
 ```
+
+
+## Building
+1. Clone the repository
+2. Restore the project: \
+   `dotnet restore`
+3. Build the project: \
+   `dotnet build`
+4. Package the project: \
+   `dotnet pack`
+5. Check the [NibblePoker.Win32.Mailslot/bin/Release](NibblePoker.Win32.Mailslot/bin/Release) folder
 
 
 ## License
