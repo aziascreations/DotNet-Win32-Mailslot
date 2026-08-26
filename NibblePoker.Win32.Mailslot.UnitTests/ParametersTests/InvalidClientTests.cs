@@ -9,16 +9,18 @@ public class InvalidClientTests {
 
     [Test]
     public void TestNullDomain() {
-        Assert.Throws<ArgumentException>(() => {
-            new MailslotClient(null, "test");
-        }, "Null host");
+        MailslotServer ms = new MailslotServer(null, "e5bc2350-4136-4218-a09c-88ce16f59114", 0, 0);
+
+        Assert.DoesNotThrow(() => {
+            new MailslotClient(null, "e5bc2350-4136-4218-a09c-88ce16f59114", mustExist: false);
+        }, "Null host shouldn't throw");
     }
 
     [Test]
     public void TestNullPath() {
         Assert.Throws<ArgumentException>(() => {
             new MailslotClient(".", null);
-        }, "Null path");
+        }, "Null path should throw");
     }
 
 #pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
@@ -33,7 +35,7 @@ public class InvalidClientTests {
     [Test]
     public void TestInvalidCharInPath() {
         Assert.Throws<ArgumentException>(() => {
-            new MailslotClient(".", "test");
+            new MailslotClient(".", "test>test");
         }, "Invalid char in path #1");
     }
 

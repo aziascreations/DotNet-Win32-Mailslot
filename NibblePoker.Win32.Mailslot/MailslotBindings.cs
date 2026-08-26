@@ -47,7 +47,16 @@ internal static class MailslotBindings {
     [DllImport("kernel32.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.None, SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]
     internal static extern bool SetMailslotInfo(
-      [In] SafeHandle hMailslot,
-      [In] uint lReadTimeout
+        [In] SafeHandle hMailslot,
+        [In] uint lReadTimeout
+    );
+
+    [DllImport("kernel32.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.None, SetLastError = true)]
+    internal static extern bool WriteFile(
+        [In] SafeHandle hFile,
+        [In] byte[] lpBuffer,
+        [In] uint nNumberOfBytesToWrite,
+        [Out, Optional] out uint lpNumberOfBytesWritten,
+        [In, Out, Optional] IntPtr lpOverlapped
     );
 }

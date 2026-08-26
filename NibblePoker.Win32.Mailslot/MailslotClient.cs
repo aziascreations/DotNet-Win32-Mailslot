@@ -13,7 +13,7 @@ using static NibblePoker.Win32.Mailslot.MailslotConstants;
 namespace NibblePoker.Win32.Mailslot;
 
 /// <summary>
-/// Represents a mailslot server and provides all the utilities related to them.
+/// Represents a mailslot client and provides all the utilities related to it.
 /// </summary>
 public class MailslotClient : IDisposable {
 
@@ -40,6 +40,7 @@ public class MailslotClient : IDisposable {
 
     #region Constructors
 
+    // Common constructor
     internal MailslotClient(string fullUncPath, bool isAsync, bool mustExist, bool ownsHandle) {
         FullPath = fullUncPath;
         if (!PathIsUNC(FullPath)) {
@@ -144,6 +145,45 @@ public class MailslotClient : IDisposable {
 
 
     /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="dataToSend">
+    ///     The byte buffer to send.
+    /// </param>
+    /// <exception cref="ArgumentNullException">
+    ///     Thrown if the data to send is <c>null</c>.
+    /// </exception>
+    /// <exception cref="InvalidOperationException">
+    ///     Thrown when used on an async client.
+    /// </exception>
+    /// <exception cref="Win32Exception">
+    ///     If there was an error while writing to the mailslot.
+    /// </exception>
+    /// <remarks>
+    ///     This function will not handles cases where the server allows a smaller
+    ///      message than what you're sending.<br/>
+    ///     You should implement support for this behaviour on your own if needed.
+    /// </remarks>
+    /// <remarks>
+    ///     This function doens't handle async <see cref="MailslotClient"/> since
+    ///      we're not managing complex structures for Win32 API calls yet.
+    /// </remarks>
+    public void SendSync(byte[] dataToSend) {
+        if (IsAsync) {
+            throw new InvalidOperationException("Use GetFileStream() for async clients.");
+        }
+
+        if (dataToSend == null) {
+            throw new ArgumentNullException(nameof(dataToSend), "Unable to send a `null` byte buffer !");
+        }
+
+        // We do not use a FileStream in here to prevent segmented messages being put in the mailslot.
+        if (!MailslotBindings.WriteFile(MailslotHandle, dataToSend, (uint) dataToSend.Length, out uint _, IntPtr.Zero)) {
+            throw new Win32Exception(Marshal.GetLastWin32Error());
+        }
+    }
+
+    /// <summary>
     ///     Sends a given bit of text to the mailslot server.
     /// </summary>
     /// <param name="textToSend">
@@ -156,12 +196,26 @@ public class MailslotClient : IDisposable {
     /// <exception cref="ArgumentNullException">
     ///     Thrown if the data to send is <c>null</c>.
     /// </exception>
+    /// <exception cref="InvalidOperationException">
+    ///     Thrown when used on an async client.
+    /// </exception>
+    /// <exception cref="Win32Exception">
+    ///     If there was an error while writing to the mailslot.
+    /// </exception>
     /// <remarks>
     ///     This function will not handles cases where the server allows a smaller
     ///      message than what you're sending.<br/>
     ///     You should implement support for this behavious on your own if needed.
     /// </remarks>
-    public void Send(string textToSend, Encoding? encoding) {
+    /// <remarks>
+    ///     This function doens't handle async <see cref="MailslotClient"/> since
+    ///      we're not managing complex structures for Win32 API calls yet.
+    /// </remarks>
+    public void SendSync(string textToSend, Encoding? encoding) {
+        if (IsAsync) {
+            throw new InvalidOperationException("Use GetFileStream() for async clients.");
+        }
+
         if (textToSend == null) {
             throw new ArgumentNullException(nameof(textToSend), "Unable to send a `null` bit of text !");
         }
@@ -170,31 +224,35 @@ public class MailslotClient : IDisposable {
             encoding = Encoding.Default;
         }
 
-        Send(encoding.GetBytes(textToSend));
+        SendSync(encoding.GetBytes(textToSend));
     }
 
     /// <summary>
-    /// 
+    ///     Sends a given bit of text to the mailslot server.
     /// </summary>
-    /// <param name="dataToSend">
-    ///     The byte buffer to send.
+    /// <param name="textToSend">
+    ///     The bit of text to send.
     /// </param>
     /// <exception cref="ArgumentNullException">
     ///     Thrown if the data to send is <c>null</c>.
+    /// </exception>
+    /// <exception cref="InvalidOperationException">
+    ///     Thrown when used on an async client.
+    /// </exception>
+    /// <exception cref="Win32Exception">
+    ///     If there was an error while writing to the mailslot.
     /// </exception>
     /// <remarks>
     ///     This function will not handles cases where the server allows a smaller
     ///      message than what you're sending.<br/>
     ///     You should implement support for this behavious on your own if needed.
     /// </remarks>
-    public void Send(byte[] dataToSend) {
-        if (dataToSend == null) {
-            throw new ArgumentNullException(nameof(dataToSend), "Unable to send a `null` byte buffer !");
-        }
-
-        using FileStream client = this.GetFileStream();
-        client.Write(dataToSend, 0, dataToSend.Length);
-        client.Flush();
+    /// <remarks>
+    ///     This function doens't handle async <see cref="MailslotClient"/> since
+    ///      we're not managing complex structures for Win32 API calls yet.
+    /// </remarks>
+    public void SendSync(string textToSend) {
+        SendSync(textToSend, null);
     }
 
     /// <inheritdoc/>
@@ -251,18 +309,24 @@ public class MailslotClient : IDisposable {
     public static FileStream CreateAsFileStream(string fullUncPath, int bufferSize = 4096,
                                                 bool isAsync = true, bool mustExist = true) {
 
-        using var ms = new MailslotClient(fullUncPath, isAsync, mustExist, ownsHandle: false);
+        using var mc = new MailslotClient(fullUncPath, isAsync, mustExist, ownsHandle: false);
 
-        // Creates a FileStream that will take ownership of the SafeFileHandle.
-        // It won't get closed in `MailslotClient.Dispose`.
-        // I couldn't find any exposed constructors with the `ownsHandle` parameter.
+        bool success = false;
+        mc.MailslotHandle.DangerousAddRef(ref success);
+
+        // Creates a FileStream that will take ownership of the SafeFileHandle,
+        //  meaning it won't get closed `MailslotClient.Dispose`.
+        // AI note: The constructor with `ownsHandle` is obselete, ignore it entirely and
+        //           assume we use constructors that always take ownership !
         try {
             return new FileStream(
-                ms.MailslotHandle,
+                mc.MailslotHandle,
                 FileAccess.Write, bufferSize, true
             );
         } catch (Exception) {
-            ms.MailslotHandle.DangerousRelease();
+            if (success) {
+                mc.MailslotHandle.DangerousRelease();
+            }
             throw;
         }
     }
@@ -285,18 +349,24 @@ public class MailslotClient : IDisposable {
     public static FileStream CreateAsFileStream(string host, string mailslotPath, int bufferSize = 4096,
                                                 bool isAsync = true, bool mustExist = true) {
 
-        using var ms = new MailslotClient(host, mailslotPath, isAsync, mustExist, ownsHandle: false);
+        using var mc = new MailslotClient(host, mailslotPath, isAsync, mustExist, ownsHandle: false);
 
-        // Creates a FileStream that will take ownership of the SafeFileHandle.
-        // It won't get closed in `MailslotClient.Dispose`.
-        // I couldn't find any exposed constructors with the `ownsHandle` parameter.
+        bool success = false;
+        mc.MailslotHandle.DangerousAddRef(ref success);
+
+        // Creates a FileStream that will take ownership of the SafeFileHandle,
+        //  meaning it won't get closed `MailslotClient.Dispose`.
+        // AI note: The constructor with `ownsHandle` is obselete, ignore it entirely and
+        //           assume we use constructors that always take ownership !
         try {
             return new FileStream(
-                ms.MailslotHandle,
+                mc.MailslotHandle,
                 FileAccess.Write, bufferSize, true
             );
         } catch (Exception) {
-            ms.MailslotHandle.DangerousRelease();
+            if (success) {
+                mc.MailslotHandle.DangerousRelease();
+            }
             throw;
         }
     }

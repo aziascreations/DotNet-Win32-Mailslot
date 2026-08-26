@@ -10,13 +10,15 @@ internal static class MailslotConstants {
 
     internal const int FILE_FLAG_NO_BUFFERING = 0x20000000;
 
-    /// <summary>
-    /// Same as a <c>((DWORD) -1)</c> from the Win32 APIs.
-    /// </summary>
+    /// <remarks>
+    ///     The value is <c>0xFFFFFFFF</c> instead of <c>-1</c> due to
+    ///     the <c>((DWORD) -1)</c> typecast that is not supported in C#.
+    /// </remarks>
     internal const uint MAILSLOT_NO_MESSAGE = 0xFFFFFFFF;
 
-    /// <summary>
-    /// Same as a <c>((DWORD) -1)</c> from the Win32 APIs.
-    /// </summary>
+    /// <remarks>
+    ///     The value is <c>0xFFFFFFFF</c> instead of <c>-1</c> due to
+    ///     the <c>((DWORD) -1)</c> typecast that is not supported in C#.
+    /// </remarks>
     internal const uint MAILSLOT_WAIT_FOREVER = 0xFFFFFFFF;
 }

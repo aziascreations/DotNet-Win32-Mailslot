@@ -52,7 +52,7 @@ public static class MailslotUtils {
     /// </summary>
     /// <param name="uncFullPath">Full UNC path to check.</param>
     /// <returns><c>true</c> if it is valid, <c>false</c> otherwise.</returns>
-    public static bool UsUncPathValid(string uncFullPath) {
+    public static bool IsUncPathValid(string uncFullPath) {
         return MailslotBindings.PathIsUNC(uncFullPath);
     }
 
@@ -82,7 +82,7 @@ public static class MailslotUtils {
         string returnValue = $"\\\\{uncHostPart}\\mailslot\\{uncPathPart}";
 
         if (checkCombinedPath) {
-            if (!UsUncPathValid(returnValue)) {
+            if (!IsUncPathValid(returnValue)) {
                 throw new ArgumentException("Invalid combination of UNC host and path values !");
             }
         }
@@ -107,7 +107,7 @@ public static class MailslotUtils {
         try {
             fullUncPath = ComposeMailslotUncPath(uncHostPart, uncPathPart, checkCombinedPath);
             return true;
-        } catch(Exception) {
+        } catch (Exception) {
             fullUncPath = "";
             return false;
         }

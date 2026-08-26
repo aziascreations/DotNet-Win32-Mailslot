@@ -12,14 +12,23 @@ namespace NibblePoker.Win32.Mailslot;
 /// Represents a mailslot server and provides all the utilities related to them.
 /// </summary>
 public class MailslotServer : IDisposable {
+
     /// <summary>
-    /// There is no next message.
+    ///     There is no next message.
     /// </summary>
+    /// <remarks>
+    ///     The value is <c>0xFFFFFFFF</c> instead of <c>-1</c> due to
+    ///     the <c>((DWORD) -1)</c> typecast that is not supported in C#.
+    /// </remarks>
     public const uint MAILSLOT_NO_MESSAGE = MailslotConstants.MAILSLOT_NO_MESSAGE;
 
     /// <summary>
     /// Waits forever for a message.
     /// </summary>
+    /// <remarks>
+    ///     The value is <c>0xFFFFFFFF</c> instead of <c>-1</c> due to
+    ///     the <c>((DWORD) -1)</c> typecast that is not supported in C#.
+    /// </remarks>
     public const uint MAILSLOT_WAIT_FOREVER = MailslotConstants.MAILSLOT_WAIT_FOREVER;
 
 
@@ -119,18 +128,19 @@ public class MailslotServer : IDisposable {
 
     #region Constructors
 
+    // Common constructor
     internal MailslotServer(string fullUncPath, uint maxMessageSize, uint readTimeoutMs, bool ownsHandle) {
         if (!PathIsUNC(fullUncPath)) {
             throw new ArgumentException($"The UNC path `{fullUncPath}` is invalid !", nameof(fullUncPath));
         }
         FullPath = fullUncPath;
 
+        _ownsHandle = ownsHandle;
+
         MailslotHandle = CreateMailslot(fullUncPath, maxMessageSize, readTimeoutMs, IntPtr.Zero);
         if (MailslotHandle.IsInvalid) {
             throw new Win32Exception(Marshal.GetLastWin32Error());
         }
-
-        _ownsHandle = ownsHandle;
     }
 
     internal MailslotServer(string? host, string mailslotPath, uint maxMessageSize, uint readTimeoutMs, bool ownsHandle) :
@@ -156,7 +166,7 @@ public class MailslotServer : IDisposable {
     /// <remarks>
     ///     [Note anbout who is the owner !]
     /// </remarks>
-    public MailslotServer(string fullUncPath, uint maxMessageSize, uint readTimeoutMs) : 
+    public MailslotServer(string fullUncPath, uint maxMessageSize, uint readTimeoutMs) :
         this(fullUncPath, maxMessageSize, readTimeoutMs, ownsHandle: true) { }
 
     /// <summary>
@@ -201,8 +211,11 @@ public class MailslotServer : IDisposable {
     /// <param name="nextSize"></param>
     /// <param name="messageCount"></param>
     /// <param name="readTimeout"></param>
-    public void GetInfo(out uint maxMessageSize, out uint nextSize, out uint messageCount, out uint readTimeout) {
-        MailslotBindings.GetMailslotInfo(MailslotHandle, out maxMessageSize, out nextSize, out messageCount, out readTimeout);
+    /// <returns>
+    ///     <c>true</c> if we could get info, <c>false</c> otherwise.
+    /// </returns>
+    public bool GetInfo(out uint maxMessageSize, out uint nextSize, out uint messageCount, out uint readTimeout) {
+        return MailslotBindings.GetMailslotInfo(MailslotHandle, out maxMessageSize, out nextSize, out messageCount, out readTimeout);
     }
 
 
@@ -231,7 +244,7 @@ public class MailslotServer : IDisposable {
         }
         _disposed = true;
 
-        if(_ownsHandle) {
+        if (_ownsHandle) {
             if (!MailslotHandle.IsInvalid && !MailslotHandle.IsClosed) {
                 MailslotHandle.Dispose();
             }
@@ -260,16 +273,22 @@ public class MailslotServer : IDisposable {
     public static FileStream CreateAsFileStream(string fullUncPath, uint maxMessageSize, uint readTimeoutMs, int bufferSize = 4096) {
         using var ms = new MailslotServer(fullUncPath, maxMessageSize, readTimeoutMs, ownsHandle: false);
 
-        // Creates a FileStream that will take ownership of the SafeFileHandle.
-        // It won't get closed in `MailslotServer.Dispose`.
-        // I couldn't find any exposed constructors with the `ownsHandle` parameter.
+        bool success = false;
+        ms.MailslotHandle.DangerousAddRef(ref success);
+
+        // Creates a FileStream that will take ownership of the SafeFileHandle,
+        //  meaning it won't get closed `MailslotServer.Dispose`.
+        // AI note: The constructor with `ownsHandle` is obselete, ignore it entirely and
+        //           assume we use constructors that always take ownership !
         try {
             return new FileStream(
                 ms.MailslotHandle,
                 FileAccess.Read, bufferSize, true
             );
-        } catch(Exception) {
-            ms.MailslotHandle.DangerousRelease();
+        } catch (Exception) {
+            if (success) {
+                ms.MailslotHandle.DangerousRelease();
+            }
             throw;
         }
     }
@@ -298,16 +317,22 @@ public class MailslotServer : IDisposable {
     public static FileStream CreateAsFileStream(string? uncDomain, string mailslotPath, uint maxMessageSize, uint readTimeoutMs, int bufferSize = 4096) {
         using var ms = new MailslotServer(uncDomain, mailslotPath, maxMessageSize, readTimeoutMs, ownsHandle: false);
 
-        // Creates a FileStream that will take ownership of the SafeFileHandle.
-        // It won't get closed in `MailslotServer.Dispose`.
-        // I couldn't find any exposed constructors with the `ownsHandle` parameter.
+        bool success = false;
+        ms.MailslotHandle.DangerousAddRef(ref success);
+
+        // Creates a FileStream that will take ownership of the SafeFileHandle,
+        //  meaning it won't get closed `MailslotServer.Dispose`.
+        // AI note: The constructor with `ownsHandle` is obselete, ignore it entirely and
+        //           assume we use constructors that always take ownership !
         try {
             return new FileStream(
                 ms.MailslotHandle,
                 FileAccess.Read, bufferSize, true
             );
         } catch (Exception) {
-            ms.MailslotHandle.DangerousRelease();
+            if (success) {
+                ms.MailslotHandle.DangerousRelease();
+            }
             throw;
         }
     }

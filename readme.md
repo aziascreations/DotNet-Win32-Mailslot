@@ -12,10 +12,19 @@ A simple library that exposes classes to interact with mailslots in a safe and .
 > I consider it feature-complete, and unless a bug is found, I don't plan on updating it.
 -->
 
+**Documentation:** [aziascreations.github.io/DotNet-Win32-Mailslot/](https://aziascreations.github.io/DotNet-Win32-Mailslot/)
+
+
 ## Features
-* ???
-  * [FileStream]
-  * [SimplifiedApi]
+* Simple and complete feature set
+  * FileStream IO *(Async/Sync)*
+    * With and without handle ownership
+    * Thread-safety not included<i>*</i>
+  * Simplified IO *(Sync)*
+    * No handle ownership worries
+    * Auto encoding
+    * Thread-safe
+  * Utilities for UNC paths
 * Easy to use, lightweight and 'to-the-point' philosophy
   * No unnecessary types, classes, procedures and whatnot
   * No dependencies attached
@@ -23,6 +32,8 @@ A simple library that exposes classes to interact with mailslots in a safe and .
   * ~~Fully compatible with [Microsoft.DotNet.ILCompiler](https://www.nuget.org/packages/Microsoft.DotNet.ILCompiler/)~~
   * Nullable annotations
   * Fully documented
+
+<i>*: Must be handled in your app via a `lock`.</i>
 
 
 ## Requirements
@@ -33,52 +44,110 @@ A simple library that exposes classes to interact with mailslots in a safe and .
   * .NET Framework 3.5, 4.0 or newer
   * .NET Core 8.0 or newer
 
+<br>
 
-## Documentation
-Go to [aziascreations.github.io/DotNet-Win32-Mailslot/](https://aziascreations.github.io/DotNet-Win32-Mailslot/) for the HTML
-documentation.
+---
 
+## Remarks
+
+### Handle Ownership
+If you instantiate a `MailslotClient`/`MailslotServer` class,
+ the underlying Win32 handle's lifecycle will be tied to that class'. \
+Any `FileStream` you create via the `GetFileStream` instance method
+ won't have ownership of it since multiple can co-exist.
+
+You can use the `CreateAsFileStream` static class functions to get
+ a `FileStream` that has ownership of the Win32 handle.
+
+### Thread Safety
+...
+
+
+<br>
+
+---
 
 ## Basic Example
+This section contains examples that should be enough to get you started.
+
+For more detailed examples, check the [???] page/section.
 
 ### Client
 
-#### Simplified API
+#### Simplified API *(Sync)*
 ```csharp
-try {
-	var mc = new MailslotClient("\\\\.\\mailslot\\test");
-	mc.Send("Hello world", Encoding.ASCII);
-} catch(Exception e) {
-	Console.Error.WriteLine(e.Message);
-}
+// Sending to `\\.\mailslot\test123`
+var client = new MailslotClient(null, "test123", isAsync: false)
+client.SendSync(mailslotText);
 ```
 
-#### FileStream API
+#### FileStream API *(Async+Sync)*
 ```csharp
-try {
-	var fs = MailslotClient.CreateAsFileStream("\\\\.\\mailslot\\test");
-	
-	byte[] bytes = Encoding.ASCII.GetBytes("Hello world");
-	
-	client.Write(bytes, 0, bytes.Length);
-	client.Flush();
-} catch(Exception e) {
-	Console.Error.WriteLine(e.Message);
+bool isAsync = true;
+
+// This FileStream own the Win32 API handle
+var fs = MailslotClient.CreateAsFileStream(
+    "\\\\.\\mailslot\\test123", isAsync: isAsync
+);
+
+byte[] data = Encoding.UTF8.GetBytes("Hello World !");
+
+if(isAsync) {
+    await fs.WriteAsync(data);
+} else {
+    fs.Write(data, 0, data.Length);
 }
+
+// May need to be moved around.
+fs.Flush(true);
 ```
+
 
 ### Server
 
 #### Simplified API
 ```csharp
-// TODO
+// TOOD: Implement this
 ```
 
-#### FileStream API
+#### FileStream API *(Blocking)*
 ```csharp
-// TODO
+string mailslotPath = Guid.NewGuid().ToString();
+uint mailslotSize = 1024;
+byte[] buffer = new byte[mailslotSize];
+
+// Server that waits forever
+Console.WriteLine($"Starting server on `\\\\.\\mailslot\\{mailslotPath}`");
+var server = new MailslotServer(
+    null, mailslotPath, mailslotSize,
+    MailslotServer.MAILSLOT_WAIT_FOREVER
+);
+
+Console.WriteLine($"Waiting for data...");
+int bytesRead = server.GetFileStream().Read(buffer, 0, buffer.Length);
+
+if (bytesRead > 0) {
+    Console.WriteLine($"Received: `{Encoding.ASCII.GetString(buffer)}`");
+} else {
+    Console.Error.WriteLine("Couldn't read from the mailslot !");
+    return 1;
+}
 ```
 
+#### FileStream API *(Polling)*
+```csharp
+// TOOD: Create this example
+```
+
+#### Manual checking *(Not recommended)*
+```csharp
+// TOOD: Create this example
+```
+
+
+<br>
+
+---
 
 ## Cloning
 Use this command to clone the repository and its submodules:

@@ -6,18 +6,82 @@ namespace NibblePoker.Win32.Mailslot.ManualTests;
 internal static class Program {
 
     public static int Main(string[] args) {
+
+        /*
         string mailslotPath = Guid.NewGuid().ToString();
         string mailslotText = "Hello world !";
+        
+        // Setting up server
+        Console.WriteLine("Starting server on `\\\\.\\mailslot\\{mailslotPath}`");
+        using (var server = new MailslotServer(null, mailslotPath, 1024, 100)) {
+            // Preparing sync client
+            using (var clientSync = new MailslotClient(null, mailslotPath, isAsync: false)) {
+                Console.WriteLine($"Sending: `{mailslotText}`");
+                clientSync.SendSync(mailslotText);
+            }
 
-        Console.WriteLine(File.Exists($"\\\\.\\mailslot\\{mailslotPath}"));
+            // Reading data from the server
+            if(server.GetInfo(out _, out uint nextMessageSize, out uint queuedMsgCount, out _)) {
+                if (queuedMsgCount <= 0) {
+                    Console.Error.WriteLine("No queued messages in the mailslot !");
+                    return 1;
+                }
 
-        MailslotServer server = new MailslotServer(mailslotPath, 1024, 99999);
+                if (nextMessageSize <= 0) {
+                    Console.Error.WriteLine($"The next message's size is invalid ! ({nextMessageSize})");
+                    return 1;
+                }
 
-        Console.WriteLine(File.Exists($"\\\\.\\mailslot\\{mailslotPath}"));
+                byte[] buffer = new byte[nextMessageSize];
+                int bytesRead = server.GetFileStream().Read(buffer, 0, buffer.Length);
 
-        MailslotClient clientSync = new MailslotClient(".", mailslotPath, false);
-        FileStream clientStream = clientSync.GetFileStream();
-        clientStream.Write(Encoding.ASCII.GetBytes(mailslotText));
+                if (bytesRead > 0) {
+                    Console.WriteLine($"Received: `{Encoding.ASCII.GetString(buffer)}`");
+                } else {
+                    Console.Error.WriteLine("Couldn't read from the mailslot !");
+                    return 1;
+                }
+            }
+        }*/
+
+
+        /*string mailslotPath = Guid.NewGuid().ToString();
+        string mailslotText = "Hello world !";
+        uint mailslotSize = 1024;
+        byte[] buffer = new byte[mailslotSize];
+
+        // Server that waits forever
+        Console.WriteLine($"Starting server on `\\\\.\\mailslot\\{mailslotPath}`");
+        var server = new MailslotServer(
+            null, mailslotPath, mailslotSize,
+            MailslotServer.MAILSLOT_WAIT_FOREVER
+        );
+
+        // Client that will send its data after 2 second.
+        Task.Factory.StartNew( () => {
+            Thread.Sleep(TimeSpan.FromSeconds(2.0));
+
+            Console.WriteLine($"Sending: `{mailslotText}`");
+            var client = new MailslotClient(null, mailslotPath, isAsync: false);
+            client.SendSync(mailslotText);
+
+            // Flushing is handled in `MailslotClient.Send`
+        });
+
+        Console.WriteLine($"Waiting for data...");
+        int bytesRead = server.GetFileStream().Read(buffer, 0, buffer.Length);
+
+        if (bytesRead > 0) {
+            Console.WriteLine($"Received: `{Encoding.ASCII.GetString(buffer)}`");
+        } else {
+            Console.Error.WriteLine("Couldn't read from the mailslot !");
+            return 1;
+        }/**/
+
+
+
+        //FileStream clientStream = clientSync.GetFileStream();
+        //clientStream.Write(Encoding.ASCII.GetBytes(mailslotText));
         //clientStream.Flush();
         /**/
 
@@ -25,14 +89,6 @@ internal static class Program {
         clientAsync.GetFileStream().WriteAsync(Encoding.ASCII.GetBytes(mailslotText));
         /**/
 
-        byte[] buffer = new byte[server.MaxMessageSize];
-        int bytesRead = server.GetFileStream().Read(buffer, 0, buffer.Length);
-
-        if(bytesRead > 0) {
-            Console.WriteLine(Encoding.ASCII.GetString(buffer));
-        } else {
-            Console.Error.WriteLine("Couldn't read from the mailslot !");
-        }
 
         return 0;
     }
