@@ -34,6 +34,13 @@ public class MailslotServer : IDisposable {
         private set;
     }
 
+    /// <summary>
+    ///     ???
+    /// </summary>
+    /// <remarks>
+    ///     You should use <see cref="MailslotServer.GetInfo"/> if you're reading more
+    ///      than 1 property in a given work unit.
+    /// </remarks>
     public uint MaxMessageSize {
         get {
             if (GetMailslotInfo(MailslotHandle, out uint dwReturnValue, out _, out _, out _)) {
@@ -44,6 +51,13 @@ public class MailslotServer : IDisposable {
         }
     }
 
+    /// <summary>
+    ///     ???
+    /// </summary>
+    /// <remarks>
+    ///     You should use <see cref="MailslotServer.GetInfo"/> if you're reading more
+    ///      than 1 property in a given work unit.
+    /// </remarks>
     public uint ReadTimeoutMs {
         get {
             if (GetMailslotInfo(MailslotHandle, out _, out _, out _, out uint dwReturnValue)) {
@@ -60,8 +74,12 @@ public class MailslotServer : IDisposable {
     }
 
     /// <summary>
-    /// Represents the number of messages queued in the mailslot.
+    ///     Represents the number of messages queued in the mailslot.
     /// </summary>
+    /// <remarks>
+    ///     You should use <see cref="MailslotServer.GetInfo"/> if you're reading more
+    ///      than 1 property in a given work unit.
+    /// </remarks>
     public uint MessageCount {
         get {
             if (GetMailslotInfo(MailslotHandle, out _, out _, out uint dwReturnValue, out _)) {
@@ -73,8 +91,12 @@ public class MailslotServer : IDisposable {
     }
 
     /// <summary>
-    /// Represents the size of the next message in the mailslot queue.
+    ///     Represents the size of the next message in the mailslot queue.
     /// </summary>
+    /// <remarks>
+    ///     You should use <see cref="MailslotServer.GetInfo"/> if you're reading more
+    ///      than 1 property in a given work unit.
+    /// </remarks>
     public uint NextMessageSize {
         get {
             if (GetMailslotInfo(MailslotHandle, out _, out uint dwReturnValue, out _, out _)) {
@@ -91,7 +113,7 @@ public class MailslotServer : IDisposable {
     // Not set to private to enable some Win32 API based tests.
     internal SafeFileHandle MailslotHandle;
 
-    private bool _disposed = false;
+    private volatile bool _disposed = false;
     private bool _ownsHandle;
 
 
@@ -111,9 +133,9 @@ public class MailslotServer : IDisposable {
         _ownsHandle = ownsHandle;
     }
 
-    internal MailslotServer(string? uncDomain, string mailslotPath, uint maxMessageSize, uint readTimeoutMs, bool ownsHandle) :
+    internal MailslotServer(string? host, string mailslotPath, uint maxMessageSize, uint readTimeoutMs, bool ownsHandle) :
         this(
-            $"\\\\{(uncDomain != null ? uncDomain : ".")}\\mailslot\\{mailslotPath}",
+            MailslotUtils.ComposeMailslotUncPath(host != null ? host : ".", mailslotPath, false),
             maxMessageSize, readTimeoutMs, ownsHandle
         ) { }
 
@@ -140,8 +162,8 @@ public class MailslotServer : IDisposable {
     /// <summary>
     ///     Creates a mailslot server on the given UNC domain at the given mailslot path.
     /// </summary>
-    /// <param name="uncDomain">
-    ///     UNC domain in which the mailslot should be created.
+    /// <param name="host">
+    ///     UNC host in which the mailslot should be created.
     ///     Leave as <c>null</c> to use <c>.</c>
     /// </param>
     /// <param name="mailslotPath">
@@ -158,9 +180,9 @@ public class MailslotServer : IDisposable {
     /// <remarks>
     ///     [Note anbout who is the owner !]
     /// </remarks>
-    public MailslotServer(string? uncDomain, string mailslotPath, uint maxMessageSize, uint readTimeoutMs) :
+    public MailslotServer(string? host, string mailslotPath, uint maxMessageSize, uint readTimeoutMs) :
         this(
-            $"\\\\{(uncDomain != null ? uncDomain : ".")}\\mailslot\\{mailslotPath}",
+            MailslotUtils.ComposeMailslotUncPath(host != null ? host : ".", mailslotPath, false),
             maxMessageSize, readTimeoutMs, ownsHandle: true
         ) { }
 
@@ -171,6 +193,18 @@ public class MailslotServer : IDisposable {
         ReadTimeoutMs = readTimeoutMs;
         return this;
     }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="maxMessageSize"></param>
+    /// <param name="nextSize"></param>
+    /// <param name="messageCount"></param>
+    /// <param name="readTimeout"></param>
+    public void GetInfo(out uint maxMessageSize, out uint nextSize, out uint messageCount, out uint readTimeout) {
+        MailslotBindings.GetMailslotInfo(MailslotHandle, out maxMessageSize, out nextSize, out messageCount, out readTimeout);
+    }
+
 
     /// <summary>
     /// 
@@ -228,10 +262,16 @@ public class MailslotServer : IDisposable {
 
         // Creates a FileStream that will take ownership of the SafeFileHandle.
         // It won't get closed in `MailslotServer.Dispose`.
-        return new FileStream(
-            ms.MailslotHandle,
-            FileAccess.Read, bufferSize, true
-        );
+        // I couldn't find any exposed constructors with the `ownsHandle` parameter.
+        try {
+            return new FileStream(
+                ms.MailslotHandle,
+                FileAccess.Read, bufferSize, true
+            );
+        } catch(Exception) {
+            ms.MailslotHandle.DangerousRelease();
+            throw;
+        }
     }
 
     /// <summary>
@@ -260,27 +300,37 @@ public class MailslotServer : IDisposable {
 
         // Creates a FileStream that will take ownership of the SafeFileHandle.
         // It won't get closed in `MailslotServer.Dispose`.
-        return new FileStream(
-            ms.MailslotHandle,
-            FileAccess.Read, bufferSize, true
-        );
+        // I couldn't find any exposed constructors with the `ownsHandle` parameter.
+        try {
+            return new FileStream(
+                ms.MailslotHandle,
+                FileAccess.Read, bufferSize, true
+            );
+        } catch (Exception) {
+            ms.MailslotHandle.DangerousRelease();
+            throw;
+        }
     }
 
     /// <summary>
     ///     Checks if a mailslot exists at a given UNC path.
     /// </summary>
     /// <param name="uncPath"></param>
-    /// <returns></returns>
+    /// <returns>
+    ///     <c>true</c> if it exists, <c>false</c> otherwise.
+    /// </returns>
     public static bool ExistsAt(string uncPath) {
         return File.Exists(uncPath);
     }
 
     /// <summary>
-    ///     Checks if a mailslot exists in a given UNC domain and at a given mailslot path.
+    ///     Checks if a mailslot exists on a given UNC host and at a given mailslot path.
     /// </summary>
     /// <param name="host"></param>
     /// <param name="path"></param>
-    /// <returns></returns>
+    /// <returns>
+    ///     <c>true</c> if it exists, <c>false</c> otherwise.
+    /// </returns>
     public static bool ExistsAt(string host, string path) {
         return ExistsAt($"\\\\{host}\\mailslot\\{path}");
     }

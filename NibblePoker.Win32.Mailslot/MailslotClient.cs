@@ -34,7 +34,7 @@ public class MailslotClient : IDisposable {
     // Not set to private to enable some Win32 API based tests.
     internal SafeFileHandle MailslotHandle;
 
-    private bool _disposed = false;
+    private volatile bool _disposed = false;
     private bool _ownsHandle;
 
 
@@ -71,8 +71,11 @@ public class MailslotClient : IDisposable {
 
     }
 
-    internal MailslotClient(string host, string mailslotPath, bool isAsync, bool mustExist, bool ownsHandle) :
-        this($"\\\\{host}\\mailslot\\{mailslotPath}", isAsync, mustExist, ownsHandle) { }
+    internal MailslotClient(string? host, string mailslotPath, bool isAsync, bool mustExist, bool ownsHandle) :
+        this(
+            MailslotUtils.ComposeMailslotUncPath(host != null ? host : ".", mailslotPath, false),
+            isAsync, mustExist, ownsHandle
+        ) { }
 
     /// <summary>
     ///     Creates a mailslot client connected to the given UNC path.
@@ -87,7 +90,8 @@ public class MailslotClient : IDisposable {
     ///     Default: <c>true</c>
     /// </param>
     /// <exception cref="ArgumentException">
-    ///     Thrown if the given UNC path is invalid.
+    ///     Thrown if the given UNC path is invalid.<br/>
+    ///     It gets thrown by the constructor and <see cref="MailslotUtils.ComposeMailslotUncPath"/>.
     /// </exception>
     /// <exception cref="IOException">
     ///     Thrown if you specified or left <c>mustExist</c> as <c>true</c> and the
@@ -115,7 +119,8 @@ public class MailslotClient : IDisposable {
     ///     Default: <c>true</c>
     /// </param>
     /// <exception cref="ArgumentException">
-    ///     Thrown if the given UNC path is invalid.
+    ///     Thrown if the given UNC path is invalid.<br/>
+    ///     It gets thrown by the constructor and <see cref="MailslotUtils.ComposeMailslotUncPath"/>.
     /// </exception>
     /// <exception cref="IOException">
     ///     Thrown if you specified or left <c>mustExist</c> as <c>true</c> and the
@@ -129,8 +134,11 @@ public class MailslotClient : IDisposable {
     ///     Checking if a mailslot exist on a remote computer may slow down the program's
     ///     execution on extremely slow networks since we may end up doing the check twice.
     /// </remarks>
-    public MailslotClient(string host, string mailslotPath, bool isAsync = true, bool mustExist = true) :
-        this($"\\\\{host}\\mailslot\\{mailslotPath}", isAsync, mustExist, ownsHandle: true) { }
+    public MailslotClient(string? host, string mailslotPath, bool isAsync = true, bool mustExist = true) :
+        this(
+            MailslotUtils.ComposeMailslotUncPath(host != null ? host : ".", mailslotPath, false),
+            isAsync, mustExist, ownsHandle: true
+        ) { }
 
     #endregion
 
@@ -168,7 +176,7 @@ public class MailslotClient : IDisposable {
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="textToSend">
+    /// <param name="dataToSend">
     ///     The byte buffer to send.
     /// </param>
     /// <exception cref="ArgumentNullException">
@@ -247,12 +255,16 @@ public class MailslotClient : IDisposable {
 
         // Creates a FileStream that will take ownership of the SafeFileHandle.
         // It won't get closed in `MailslotClient.Dispose`.
-        return new FileStream(
-            ms.MailslotHandle,
-            FileAccess.Write, bufferSize, true
-        );
-
-
+        // I couldn't find any exposed constructors with the `ownsHandle` parameter.
+        try {
+            return new FileStream(
+                ms.MailslotHandle,
+                FileAccess.Write, bufferSize, true
+            );
+        } catch (Exception) {
+            ms.MailslotHandle.DangerousRelease();
+            throw;
+        }
     }
 
     /// <summary>
@@ -277,10 +289,16 @@ public class MailslotClient : IDisposable {
 
         // Creates a FileStream that will take ownership of the SafeFileHandle.
         // It won't get closed in `MailslotClient.Dispose`.
-        return new FileStream(
-            ms.MailslotHandle,
-            FileAccess.Write, bufferSize, true
-        );
+        // I couldn't find any exposed constructors with the `ownsHandle` parameter.
+        try {
+            return new FileStream(
+                ms.MailslotHandle,
+                FileAccess.Write, bufferSize, true
+            );
+        } catch (Exception) {
+            ms.MailslotHandle.DangerousRelease();
+            throw;
+        }
     }
 
     #endregion
