@@ -29,10 +29,19 @@ var NAVTREE =
       [ "Features", "index.html#autotoc_md1", null ],
       [ "Requirements", "index.html#autotoc_md2", null ],
       [ "Documentation", "index.html#autotoc_md3", null ],
-      [ "Building", "index.html#autotoc_md4", null ],
-      [ "Basic Example", "index.html#autotoc_md5", null ],
-      [ "Cloning", "index.html#autotoc_md6", null ],
-      [ "License", "index.html#autotoc_md7", null ]
+      [ "Basic Example", "index.html#autotoc_md4", [
+        [ "Client", "index.html#autotoc_md5", [
+          [ "Simplified API", "index.html#autotoc_md6", null ],
+          [ "FileStream API", "index.html#autotoc_md7", null ]
+        ] ],
+        [ "Server", "index.html#autotoc_md8", [
+          [ "Simplified API", "index.html#autotoc_md9", null ],
+          [ "FileStream API", "index.html#autotoc_md10", null ]
+        ] ]
+      ] ],
+      [ "Cloning", "index.html#autotoc_md11", null ],
+      [ "Building", "index.html#autotoc_md12", null ],
+      [ "License", "index.html#autotoc_md13", null ]
     ] ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],

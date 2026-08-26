@@ -100,6 +100,11 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <h1><a class="anchor" id="autotoc_md1"></a>
 Features</h1>
 <ul>
+<li>???<ul>
+<li>[FileStream]</li>
+<li>[SimplifiedApi]</li>
+</ul>
+</li>
 <li>Easy to use, lightweight and 'to-the-point' philosophy<ul>
 <li>No unnecessary types, classes, procedures and whatnot</li>
 <li>No dependencies attached</li>
@@ -108,7 +113,7 @@ Features</h1>
 <li>Supports modern developer QoL<ul>
 <li><strike>Fully compatible with <a href="https://www.nuget.org/packages/Microsoft.DotNet.ILCompiler/">Microsoft.DotNet.ILCompiler</a></strike></li>
 <li>Nullable annotations</li>
-<li><strike>Fully documented</strike></li>
+<li>Fully documented</li>
 </ul>
 </li>
 </ul>
@@ -130,17 +135,53 @@ Requirements</h1>
 Documentation</h1>
 <p >Go to <a href="https://aziascreations.github.io/DotNet-Win32-Mailslot/">aziascreations.github.io/DotNet-Win32-Mailslot/</a> for the HTML documentation.</p>
 <h1><a class="anchor" id="autotoc_md4"></a>
-Building</h1>
-<p >Please refer to the building.md file for more information.</p>
-<h1><a class="anchor" id="autotoc_md5"></a>
 Basic Example</h1>
-<p ><strike>The following example shows you how to declare 2 options and how to parse and use the launch arguments.</strike></p>
+<h2><a class="anchor" id="autotoc_md5"></a>
+Client</h2>
+<h3><a class="anchor" id="autotoc_md6"></a>
+Simplified API</h3>
+<div class="fragment"><div class="line"><span class="keywordflow">try</span> {</div>
+<div class="line">    var mc = <span class="keyword">new</span> <a class="code hl_class" href="classMailslotClient.html">MailslotClient</a>(<span class="stringliteral">&quot;\\\\.\\mailslot\\test&quot;</span>);</div>
+<div class="line">    mc.Send(<span class="stringliteral">&quot;Hello world&quot;</span>, Encoding.ASCII);</div>
+<div class="line">} <span class="keywordflow">catch</span>(Exception e) {</div>
+<div class="line">    Console.Error.WriteLine(e.Message);</div>
+<div class="line">}</div>
+<div class="ttc" id="aclassMailslotClient_html"><div class="ttname"><a href="classMailslotClient.html">MailslotClient</a></div><div class="ttdoc">Represents a mailslot server and provides all the utilities related to them.</div><div class="ttdef"><b>Definition:</b> MailslotClient.cs:18</div></div>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md7"></a>
+FileStream API</h3>
+<div class="fragment"><div class="line"><span class="keywordflow">try</span> {</div>
+<div class="line">    var fs = <a class="code hl_class" href="classMailslotClient.html">MailslotClient</a>.<a class="code hl_function" href="classMailslotClient.html#a8355973615039d285e30d7bdb8e5afb1">CreateAsFileStream</a>(<span class="stringliteral">&quot;\\\\.\\mailslot\\test&quot;</span>);</div>
+<div class="line">    </div>
+<div class="line">    <span class="keywordtype">byte</span>[] bytes = Encoding.ASCII.GetBytes(<span class="stringliteral">&quot;Hello world&quot;</span>);</div>
+<div class="line">    </div>
+<div class="line">    client.Write(bytes, 0, bytes.Length);</div>
+<div class="line">    client.Flush();</div>
+<div class="line">} <span class="keywordflow">catch</span>(Exception e) {</div>
+<div class="line">    Console.Error.WriteLine(e.Message);</div>
+<div class="line">}</div>
+<div class="ttc" id="aclassMailslotClient_html_a8355973615039d285e30d7bdb8e5afb1"><div class="ttname"><a href="classMailslotClient.html#a8355973615039d285e30d7bdb8e5afb1">MailslotClient.CreateAsFileStream</a></div><div class="ttdeci">static FileStream CreateAsFileStream(string fullUncPath, int bufferSize=4096, bool isAsync=true, bool mustExist=true)</div><div class="ttdef"><b>Definition:</b> MailslotClient.cs:243</div></div>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md8"></a>
+Server</h2>
+<h3><a class="anchor" id="autotoc_md9"></a>
+Simplified API</h3>
 <div class="fragment"><div class="line"><span class="comment">// TODO</span></div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md6"></a>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md10"></a>
+FileStream API</h3>
+<div class="fragment"><div class="line"><span class="comment">// TODO</span></div>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md11"></a>
 Cloning</h1>
 <p >Use this command to clone the repository and its submodules: </p><div class="fragment"><div class="line">git clone --recurse-submodules https://github.com/aziascreations/DotNet-Win32-Mailslot.git</div>
 </div><!-- fragment --><p >If you forgot the submodules, use this command: </p><div class="fragment"><div class="line">git submodule update --init --recursive</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md7"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md12"></a>
+Building</h1>
+<ol type="1">
+<li>Clone the repository</li>
+<li>Restore the project: \ <code>dotnet restore</code></li>
+<li>Build the project: \ <code>dotnet build</code></li>
+<li>Package the project: \ <code>dotnet pack</code></li>
+<li>Check the <a href="NibblePoker.Win32.Mailslot/bin/Release">NibblePoker.Win32.Mailslot/bin/Release</a> folder</li>
+</ol>
+<h1><a class="anchor" id="autotoc_md13"></a>
 License</h1>
 <p >The code in this repository is licensed under <a href="https://github.com/aziascreations/DotNet-Win32-Mailslot/blob/master/LICENSE">CC0 1.0 Universal (CC0 1.0) (Public Domain)</a>.</p>
 <p >The <a href="https://github.com/jothepro/doxygen-awesome-css">doxygen-awesome-css</a> repository is used as a submodule for Doxygen and is licensed under the <a href="https://github.com/jothepro/doxygen-awesome-css/blob/main/LICENSE">MIT license</a>. </p>
