@@ -15,7 +15,12 @@ namespace NibblePoker.Win32.Mailslot;
 /// <summary>
 /// Represents a mailslot client and provides all the utilities related to it.
 /// </summary>
-public class MailslotClient : IDisposable {
+/// <remarks>
+///     This class <b>is</b> the <see cref="FileStream"/> you write to: there's no separate
+///      handle to own, duplicate or hand out. Just pass the instance itself around to
+///      wherever it needs to be written to.
+/// </remarks>
+public class MailslotClient : FileStream {
 
     /// <summary>
     /// UNC path to which the client is connected.<br/>
@@ -32,51 +37,13 @@ public class MailslotClient : IDisposable {
     }
 
     // Not set to private to enable some Win32 API based tests.
-    internal SafeFileHandle MailslotHandle;
-
-    private volatile bool _disposed = false;
-    private bool _ownsHandle;
+    // `SafeFileHandle` is inherited from `FileStream`: this instance's handle *is* the mailslot's handle.
+    internal SafeFileHandle MailslotHandle {
+        get => SafeFileHandle;
+    }
 
 
     #region Constructors
-
-    // Common constructor
-    internal MailslotClient(string fullUncPath, bool isAsync, bool mustExist, bool ownsHandle) {
-        FullPath = fullUncPath;
-        if (!PathIsUNC(FullPath)) {
-            throw new ArgumentException("Invalid combination of UNC host and path values !");
-        }
-
-        if (mustExist) {
-            if (!File.Exists(FullPath)) {
-                throw new IOException($"The resource at '{FullPath}' doesn't exist !");
-            }
-        }
-
-        _ownsHandle = ownsHandle;
-
-        IsAsync = isAsync;
-
-        MailslotHandle = CreateFile(
-            FullPath,
-            FileAccess.Write,    // Clients can only write
-            FileShare.ReadWrite, // Shared with the server
-            IntPtr.Zero,         // Ignored for mailslots
-            FileMode.Open,       // Same as `OPEN_EXISTING`
-            IsAsync ? (FileAttributes) FILE_FLAG_OVERLAPPED : FILE_FLAG_NONE,
-            IntPtr.Zero          // Ignored for mailslots
-        );
-        if (MailslotHandle.IsInvalid) {
-            throw new Win32Exception(Marshal.GetLastWin32Error());
-        }
-
-    }
-
-    internal MailslotClient(string? host, string mailslotPath, bool isAsync, bool mustExist, bool ownsHandle) :
-        this(
-            MailslotUtils.ComposeMailslotUncPath(host != null ? host : ".", mailslotPath, false),
-            isAsync, mustExist, ownsHandle
-        ) { }
 
     /// <summary>
     ///     Creates a mailslot client connected to the given UNC path.
@@ -90,34 +57,9 @@ public class MailslotClient : IDisposable {
     ///     Checks if the mailslot you specified exist before we attempt to connect to it.<br/>
     ///     Default: <c>true</c>
     /// </param>
-    /// <exception cref="ArgumentException">
-    ///     Thrown if the given UNC path is invalid.<br/>
-    ///     It gets thrown by the constructor and <see cref="MailslotUtils.ComposeMailslotUncPath"/>.
-    /// </exception>
-    /// <exception cref="IOException">
-    ///     Thrown if you specified or left <c>mustExist</c> as <c>true</c> and the
-    ///     server doesn't exist or can't be connected to.
-    /// </exception>
-    /// <exception cref="Win32Exception">
-    ///     Thrown if we got an invalid <see cref="SafeFileHandle"/> while opening
-    ///     the mailslot in the Win32 APIs.
-    /// </exception>
-    /// <remarks>
-    ///     Checking if a mailslot exist on a remote computer may slow down the program's
-    ///     execution on extremely slow networks since we may end up doing the check twice.
-    /// </remarks>
-    public MailslotClient(string fullUncPath, bool isAsync = true, bool mustExist = true) :
-        this(fullUncPath, isAsync, mustExist, ownsHandle: true) { }
-
-    /// <summary>
-    ///     Creates a mailslot client connected to the given host's mailslot at the given path.
-    /// </summary>
-    /// <param name="host"></param>
-    /// <param name="mailslotPath"></param>
-    /// <param name="isAsync"></param>
-    /// <param name="mustExist">
-    ///     Checks if the mailslot you specified exist before we attempt to connect to it.<br/>
-    ///     Default: <c>true</c>
+    /// <param name="bufferSize">
+    ///     A positive <see cref="Int32"/> value greater than 0 indicating the buffer size.<br/>
+    ///     The default buffer size is 4096.
     /// </param>
     /// <exception cref="ArgumentException">
     ///     Thrown if the given UNC path is invalid.<br/>
@@ -135,17 +77,63 @@ public class MailslotClient : IDisposable {
     ///     Checking if a mailslot exist on a remote computer may slow down the program's
     ///     execution on extremely slow networks since we may end up doing the check twice.
     /// </remarks>
-    public MailslotClient(string? host, string mailslotPath, bool isAsync = true, bool mustExist = true) :
+    /// <remarks>
+    ///     This instance is itself the <see cref="FileStream"/> backed by the mailslot's
+    ///      handle: it owns that handle for its whole lifetime, and disposing it closes it.
+    ///      Pass the instance around directly wherever it needs to be written to.
+    /// </remarks>
+    public MailslotClient(string fullUncPath, bool isAsync = true, bool mustExist = true, int bufferSize = 4096) :
+        base(CreateMailslotClientHandle(fullUncPath, isAsync, mustExist), FileAccess.Write, bufferSize, isAsync) {
+        FullPath = fullUncPath;
+        IsAsync = isAsync;
+    }
+
+    /// <summary>
+    ///     Creates a mailslot client connected to the given host's mailslot at the given path.
+    /// </summary>
+    /// <param name="host"></param>
+    /// <param name="mailslotPath"></param>
+    /// <param name="isAsync"></param>
+    /// <param name="mustExist">
+    ///     Checks if the mailslot you specified exist before we attempt to connect to it.<br/>
+    ///     Default: <c>true</c>
+    /// </param>
+    /// <param name="bufferSize">
+    ///     A positive <see cref="Int32"/> value greater than 0 indicating the buffer size.<br/>
+    ///     The default buffer size is 4096.
+    /// </param>
+    /// <exception cref="ArgumentException">
+    ///     Thrown if the given UNC path is invalid.<br/>
+    ///     It gets thrown by the constructor and <see cref="MailslotUtils.ComposeMailslotUncPath"/>.
+    /// </exception>
+    /// <exception cref="IOException">
+    ///     Thrown if you specified or left <c>mustExist</c> as <c>true</c> and the
+    ///     server doesn't exist or can't be connected to.
+    /// </exception>
+    /// <exception cref="Win32Exception">
+    ///     Thrown if we got an invalid <see cref="SafeFileHandle"/> while opening
+    ///     the mailslot in the Win32 APIs.
+    /// </exception>
+    /// <remarks>
+    ///     Checking if a mailslot exist on a remote computer may slow down the program's
+    ///     execution on extremely slow networks since we may end up doing the check twice.
+    /// </remarks>
+    /// <remarks>
+    ///     This instance is itself the <see cref="FileStream"/> backed by the mailslot's
+    ///      handle: it owns that handle for its whole lifetime, and disposing it closes it.
+    ///      Pass the instance around directly wherever it needs to be written to.
+    /// </remarks>
+    public MailslotClient(string? host, string mailslotPath, bool isAsync = true, bool mustExist = true, int bufferSize = 4096) :
         this(
             MailslotUtils.ComposeMailslotUncPath(host != null ? host : ".", mailslotPath, false),
-            isAsync, mustExist, ownsHandle: true
+            isAsync, mustExist, bufferSize
         ) { }
 
     #endregion
 
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="dataToSend">
     ///     The byte buffer to send.
@@ -168,9 +156,9 @@ public class MailslotClient : IDisposable {
     ///     This function doens't handle async <see cref="MailslotClient"/> since
     ///      we're not managing complex structures for Win32 API calls yet.
     /// </remarks>
-    public void SendSync(byte[] dataToSend) {
+    /*public void SendSync(byte[] dataToSend) {
         if (IsAsync) {
-            throw new InvalidOperationException("Use GetFileStream() for async clients.");
+            throw new InvalidOperationException("Use Write/WriteAsync directly on this instance for async clients.");
         }
 
         if (dataToSend == null) {
@@ -181,7 +169,7 @@ public class MailslotClient : IDisposable {
         if (!MailslotBindings.WriteFile(MailslotHandle, dataToSend, (uint) dataToSend.Length, out uint _, IntPtr.Zero)) {
             throw new Win32Exception(Marshal.GetLastWin32Error());
         }
-    }
+    }*/
 
     /// <summary>
     ///     Sends a given bit of text to the mailslot server.
@@ -211,9 +199,9 @@ public class MailslotClient : IDisposable {
     ///     This function doens't handle async <see cref="MailslotClient"/> since
     ///      we're not managing complex structures for Win32 API calls yet.
     /// </remarks>
-    public void SendSync(string textToSend, Encoding? encoding) {
+    /*public void SendSync(string textToSend, Encoding? encoding) {
         if (IsAsync) {
-            throw new InvalidOperationException("Use GetFileStream() for async clients.");
+            throw new InvalidOperationException("Use Write/WriteAsync directly on this instance for async clients.");
         }
 
         if (textToSend == null) {
@@ -225,7 +213,7 @@ public class MailslotClient : IDisposable {
         }
 
         SendSync(encoding.GetBytes(textToSend));
-    }
+    }*/
 
     /// <summary>
     ///     Sends a given bit of text to the mailslot server.
@@ -251,49 +239,62 @@ public class MailslotClient : IDisposable {
     ///     This function doens't handle async <see cref="MailslotClient"/> since
     ///      we're not managing complex structures for Win32 API calls yet.
     /// </remarks>
-    public void SendSync(string textToSend) {
+    /*public void SendSync(string textToSend) {
         SendSync(textToSend, null);
-    }
-
-    /// <inheritdoc/>
-    public void Dispose() {
-        if (_disposed) {
-            return;
-        }
-        _disposed = true;
-
-        if (_ownsHandle) {
-            if (!MailslotHandle.IsInvalid && !MailslotHandle.IsClosed) {
-                MailslotHandle.Dispose();
-            }
-        }
-
-        GC.SuppressFinalize(this);
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="bufferSize">
-    ///     A positive <see cref="Int32"/> value greater than 0 indicating the buffer size.<br/>
-    ///     The default buffer size is 4096.
-    /// </param>
-    /// <returns></returns>
-    /// <remarks>
-    ///     The returned FileStream doesn't own the <see cref="SafeFileHandle"/>, the <see cref="MailslotClient"/> instance does.
-    /// </remarks>
-    public FileStream GetFileStream(int bufferSize = 4096) {
-        return new FileStream(
-             new SafeFileHandle(MailslotHandle.DangerousGetHandle(), ownsHandle: false),
-            FileAccess.Write, bufferSize, IsAsync
-        );
-    }
+    }*/
 
 
     #region Class methods
 
     /// <summary>
-    /// 
+    ///     Validates the given UNC path, optionally checks that it already exists, and
+    ///      opens the underlying mailslot client handle for it.
+    /// </summary>
+    /// <remarks>
+    ///     Exists solely so the handle can be produced as an argument to this class'
+    ///      <c>base(...)</c> (i.e. <see cref="FileStream"/>) constructor call, since that
+    ///      must run before any instance code of this class does.
+    /// </remarks>
+    /// <exception cref="ArgumentException">
+    ///     Thrown if the given UNC path is invalid.
+    /// </exception>
+    /// <exception cref="IOException">
+    ///     Thrown if <paramref name="mustExist"/> is <c>true</c> and the server doesn't
+    ///      exist or can't be connected to.
+    /// </exception>
+    /// <exception cref="Win32Exception">
+    ///     Thrown if we got an invalid <see cref="SafeFileHandle"/> while opening
+    ///      the mailslot in the Win32 APIs.
+    /// </exception>
+    private static SafeFileHandle CreateMailslotClientHandle(string fullUncPath, bool isAsync, bool mustExist) {
+        if (!PathIsUNC(fullUncPath)) {
+            throw new ArgumentException("Invalid combination of UNC host and path values !");
+        }
+
+        if (mustExist) {
+            if (!File.Exists(fullUncPath)) {
+                throw new IOException($"The resource at '{fullUncPath}' doesn't exist !");
+            }
+        }
+
+        SafeFileHandle handle = CreateFile(
+            fullUncPath,
+            FileAccess.Write,    // Clients can only write
+            FileShare.ReadWrite, // Shared with the server
+            IntPtr.Zero,         // Ignored for mailslots
+            FileMode.Open,       // Same as `OPEN_EXISTING`
+            isAsync ? (FileAttributes) FILE_FLAG_OVERLAPPED : FILE_FLAG_NONE,
+            IntPtr.Zero          // Ignored for mailslots
+        );
+        if (handle.IsInvalid) {
+            throw new Win32Exception(Marshal.GetLastWin32Error());
+        }
+
+        return handle;
+    }
+
+    /// <summary>
+    ///
     /// </summary>
     /// <param name="fullUncPath"></param>
     /// <param name="bufferSize">
@@ -308,31 +309,11 @@ public class MailslotClient : IDisposable {
     /// <returns></returns>
     public static FileStream CreateAsFileStream(string fullUncPath, int bufferSize = 4096,
                                                 bool isAsync = true, bool mustExist = true) {
-
-        using var mc = new MailslotClient(fullUncPath, isAsync, mustExist, ownsHandle: false);
-
-        bool success = false;
-        mc.MailslotHandle.DangerousAddRef(ref success);
-
-        // Creates a FileStream that will take ownership of the SafeFileHandle,
-        //  meaning it won't get closed `MailslotClient.Dispose`.
-        // AI note: The constructor with `ownsHandle` is obselete, ignore it entirely and
-        //           assume we use constructors that always take ownership !
-        try {
-            return new FileStream(
-                mc.MailslotHandle,
-                FileAccess.Write, bufferSize, true
-            );
-        } catch (Exception) {
-            if (success) {
-                mc.MailslotHandle.DangerousRelease();
-            }
-            throw;
-        }
+        return new MailslotClient(fullUncPath, isAsync, mustExist, bufferSize);
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="host"></param>
     /// <param name="mailslotPath"></param>
@@ -348,27 +329,7 @@ public class MailslotClient : IDisposable {
     /// <returns></returns>
     public static FileStream CreateAsFileStream(string host, string mailslotPath, int bufferSize = 4096,
                                                 bool isAsync = true, bool mustExist = true) {
-
-        using var mc = new MailslotClient(host, mailslotPath, isAsync, mustExist, ownsHandle: false);
-
-        bool success = false;
-        mc.MailslotHandle.DangerousAddRef(ref success);
-
-        // Creates a FileStream that will take ownership of the SafeFileHandle,
-        //  meaning it won't get closed `MailslotClient.Dispose`.
-        // AI note: The constructor with `ownsHandle` is obselete, ignore it entirely and
-        //           assume we use constructors that always take ownership !
-        try {
-            return new FileStream(
-                mc.MailslotHandle,
-                FileAccess.Write, bufferSize, true
-            );
-        } catch (Exception) {
-            if (success) {
-                mc.MailslotHandle.DangerousRelease();
-            }
-            throw;
-        }
+        return new MailslotClient(host, mailslotPath, isAsync, mustExist, bufferSize);
     }
 
     #endregion

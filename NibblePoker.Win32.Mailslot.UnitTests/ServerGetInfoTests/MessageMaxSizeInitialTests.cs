@@ -2,7 +2,7 @@ using NUnit.Framework;
 
 namespace NibblePoker.Win32.Mailslot.UnitTests.ServerGetInfoTests;
 
-internal class MessageMaxSizeTests {
+internal class MessageMaxSizeInitialTests {
 
     [Test]
     public void TestInitialValues() {

@@ -2,8 +2,12 @@ using NUnit.Framework;
 
 namespace NibblePoker.Win32.Mailslot.UnitTests.ServerGetInfoTests;
 
-internal class ReadTimeoutTests {
+internal class ReadTimeoutChangeTests {
 
+    /// <summary>
+    /// Checks if setting the read timeout via the property work on a server.<br/>
+    /// This is the only property that can be changed after instantiation.
+    /// </summary>
     [Test]
     public void TestValueChangeViaProperties() {
         MailslotServer ms = new MailslotServer(".", "99790723-b102-4bee-9f4b-aeaa1e9355a4", 0, 0);
@@ -13,6 +17,10 @@ internal class ReadTimeoutTests {
         Assert.That(ms.ReadTimeoutMs, Is.EqualTo(42));
     }
 
+    /// <summary>
+    /// Checks if setting the read timeout via the Win32 APIs work on a server.<br/>
+    /// This is the only property that can be changed after instantiation.
+    /// </summary>
     [Test]
     public void TestValueChangeViaWinApi() {
         MailslotServer ms = new MailslotServer(".", "4deaf0be-4d75-48a7-9bb1-c1558f3992f8", 0, 0);

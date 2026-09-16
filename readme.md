@@ -51,13 +51,13 @@ A simple library that exposes classes to interact with mailslots in a safe and .
 ## Remarks
 
 ### Handle Ownership
-If you instantiate a `MailslotClient`/`MailslotServer` class,
- the underlying Win32 handle's lifecycle will be tied to that class'. \
-Any `FileStream` you create via the `GetFileStream` instance method
- won't have ownership of it since multiple can co-exist.
+Both `MailslotClient` and `MailslotServer` are themselves `FileStream`s: there's no
+ separate handle to own, duplicate or hand out. \
+Pass the instance around directly to wherever it needs to be read from or written to,
+ and dispose of it whenever you're done with it, same as any other `FileStream`.
 
-You can use the `CreateAsFileStream` static class functions to get
- a `FileStream` that has ownership of the Win32 handle.
+You can use the `CreateAsFileStream` static class functions to get a `FileStream`
+ directly, without keeping the client/server instance around yourself.
 
 ### Thread Safety
 ...
@@ -124,7 +124,7 @@ var server = new MailslotServer(
 );
 
 Console.WriteLine($"Waiting for data...");
-int bytesRead = server.GetFileStream().Read(buffer, 0, buffer.Length);
+int bytesRead = server.Read(buffer, 0, buffer.Length);
 
 if (bytesRead > 0) {
     Console.WriteLine($"Received: `{Encoding.ASCII.GetString(buffer)}`");
