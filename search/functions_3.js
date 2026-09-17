@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['getfilestream_0',['GetFileStream',['../classMailslotClient.html#a1b48e71374d21e095020b9d72d0bf0f8',1,'MailslotClient.GetFileStream()'],['../classMailslotServer.html#a1c6ba7a1da72f1b03b75e1870cb9da48',1,'MailslotServer.GetFileStream(int bufferSize=4096)']]],
-  ['getinfo_1',['GetInfo',['../classMailslotServer.html#a3bb68c2cb81517d042355c5c98df21a9',1,'MailslotServer']]]
+  ['isunchostpartvalid_0',['IsUncHostPartValid',['../classMailslotUtils.html#a9b3c4734068a37a58be9d8a3f76c2395',1,'MailslotUtils']]],
+  ['isuncpathpartvalid_1',['IsUncPathPartValid',['../classMailslotUtils.html#aa327f1ac82d9a355f1948a40b5c2ec2c',1,'MailslotUtils']]],
+  ['isuncpathvalid_2',['IsUncPathValid',['../classMailslotUtils.html#a27baa810540e3b5d157eeefd9d3cf0e7',1,'MailslotUtils']]]
 ];

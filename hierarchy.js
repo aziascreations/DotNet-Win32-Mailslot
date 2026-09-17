@@ -1,6 +1,6 @@
 var hierarchy =
 [
-    [ "IDisposable", null, [
+    [ "FileStream", null, [
       [ "MailslotClient", "classMailslotClient.html", null ],
       [ "MailslotServer", "classMailslotServer.html", null ]
     ] ],

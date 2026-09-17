@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['isunchostpartvalid_0',['IsUncHostPartValid',['../classMailslotUtils.html#a9b3c4734068a37a58be9d8a3f76c2395',1,'MailslotUtils']]],
-  ['isuncpathpartvalid_1',['IsUncPathPartValid',['../classMailslotUtils.html#aa327f1ac82d9a355f1948a40b5c2ec2c',1,'MailslotUtils']]],
-  ['isuncpathvalid_2',['IsUncPathValid',['../classMailslotUtils.html#a27baa810540e3b5d157eeefd9d3cf0e7',1,'MailslotUtils']]]
+  ['mailslotclient_0',['MailslotClient',['../classMailslotClient.html#a822975f36b0b3cc11f2a5436e54425a7',1,'MailslotClient.MailslotClient(string fullUncPath, bool isAsync=true, bool mustExist=true, int bufferSize=4096)'],['../classMailslotClient.html#ae7b8bfa7e18df1cb0d22a50bd4c2ef21',1,'MailslotClient.MailslotClient(string? host, string mailslotPath, bool isAsync=true, bool mustExist=true, int bufferSize=4096)']]],
+  ['mailslotserver_1',['MailslotServer',['../classMailslotServer.html#a757875f6e02f0f5fd612adb9d41f3ea8',1,'MailslotServer.MailslotServer(string fullUncPath, uint maxMessageSize, uint readTimeoutMs, int bufferSize=4096)'],['../classMailslotServer.html#a8de731d6b2851ffe7dd6b354ee5e0fd5',1,'MailslotServer.MailslotServer(string? host, string mailslotPath, uint maxMessageSize, uint readTimeoutMs, int bufferSize=4096)']]]
 ];

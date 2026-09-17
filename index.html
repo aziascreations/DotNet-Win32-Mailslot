@@ -150,8 +150,8 @@ Requirements</h1>
 Remarks</h1>
 <h2><a class="anchor" id="autotoc_md5"></a>
 Handle Ownership</h2>
-<p >If you instantiate a <code><a class="el" href="classMailslotClient.html" title="Represents a mailslot client and provides all the utilities related to it.">MailslotClient</a></code>/<code><a class="el" href="classMailslotServer.html" title="Represents a mailslot server and provides all the utilities related to them.">MailslotServer</a></code> class, the underlying Win32 handle's lifecycle will be tied to that class'. \ Any <code>FileStream</code> you create via the <code>GetFileStream</code> instance method won't have ownership of it since multiple can co-exist.</p>
-<p >You can use the <code>CreateAsFileStream</code> static class functions to get a <code>FileStream</code> that has ownership of the Win32 handle.</p>
+<p >Both <code><a class="el" href="classMailslotClient.html" title="Represents a mailslot client and provides all the utilities related to it.">MailslotClient</a></code> and <code><a class="el" href="classMailslotServer.html" title="Represents a mailslot server and provides all the utilities related to them.">MailslotServer</a></code> are themselves <code>FileStream</code>s: there's no separate handle to own, duplicate or hand out. \ Pass the instance around directly to wherever it needs to be read from or written to, and dispose of it whenever you're done with it, same as any other <code>FileStream</code>.</p>
+<p >You can use the <code>CreateAsFileStream</code> static class functions to get a <code>FileStream</code> directly, without keeping the client/server instance around yourself.</p>
 <h2><a class="anchor" id="autotoc_md6"></a>
 Thread Safety</h2>
 <p >...</p>
@@ -168,9 +168,8 @@ Client</h2>
 Simplified API *(Sync)*</h3>
 <div class="fragment"><div class="line"><span class="comment">// Sending to `\\.\mailslot\test123`</span></div>
 <div class="line">var client = <span class="keyword">new</span> <a class="code hl_class" href="classMailslotClient.html">MailslotClient</a>(<span class="keyword">null</span>, <span class="stringliteral">&quot;test123&quot;</span>, isAsync: <span class="keyword">false</span>)</div>
-<div class="line">client.<a class="code hl_function" href="classMailslotClient.html#ab25df4690f692934bad8849aa7c5d481">SendSync</a>(mailslotText);</div>
-<div class="ttc" id="aclassMailslotClient_html"><div class="ttname"><a href="classMailslotClient.html">MailslotClient</a></div><div class="ttdoc">Represents a mailslot client and provides all the utilities related to it.</div><div class="ttdef"><b>Definition:</b> MailslotClient.cs:18</div></div>
-<div class="ttc" id="aclassMailslotClient_html_ab25df4690f692934bad8849aa7c5d481"><div class="ttname"><a href="classMailslotClient.html#ab25df4690f692934bad8849aa7c5d481">MailslotClient.SendSync</a></div><div class="ttdeci">void SendSync(byte[] dataToSend)</div><div class="ttdef"><b>Definition:</b> MailslotClient.cs:171</div></div>
+<div class="line">client.SendSync(mailslotText);</div>
+<div class="ttc" id="aclassMailslotClient_html"><div class="ttname"><a href="classMailslotClient.html">MailslotClient</a></div><div class="ttdoc">Represents a mailslot client and provides all the utilities related to it.</div><div class="ttdef"><b>Definition:</b> MailslotClient.cs:23</div></div>
 </div><!-- fragment --><h3><a class="anchor" id="autotoc_md11"></a>
 FileStream API *(Async+Sync)*</h3>
 <div class="fragment"><div class="line"><span class="keywordtype">bool</span> isAsync = <span class="keyword">true</span>;</div>
@@ -190,7 +189,7 @@ FileStream API *(Async+Sync)*</h3>
 <div class="line"> </div>
 <div class="line"><span class="comment">// May need to be moved around.</span></div>
 <div class="line">fs.Flush(<span class="keyword">true</span>);</div>
-<div class="ttc" id="aclassMailslotClient_html_a8355973615039d285e30d7bdb8e5afb1"><div class="ttname"><a href="classMailslotClient.html#a8355973615039d285e30d7bdb8e5afb1">MailslotClient.CreateAsFileStream</a></div><div class="ttdeci">static FileStream CreateAsFileStream(string fullUncPath, int bufferSize=4096, bool isAsync=true, bool mustExist=true)</div><div class="ttdef"><b>Definition:</b> MailslotClient.cs:309</div></div>
+<div class="ttc" id="aclassMailslotClient_html_a8355973615039d285e30d7bdb8e5afb1"><div class="ttname"><a href="classMailslotClient.html#a8355973615039d285e30d7bdb8e5afb1">MailslotClient.CreateAsFileStream</a></div><div class="ttdeci">static FileStream CreateAsFileStream(string fullUncPath, int bufferSize=4096, bool isAsync=true, bool mustExist=true)</div><div class="ttdef"><b>Definition:</b> MailslotClient.cs:310</div></div>
 </div><!-- fragment --><h2><a class="anchor" id="autotoc_md12"></a>
 Server</h2>
 <h3><a class="anchor" id="autotoc_md13"></a>
@@ -210,7 +209,7 @@ FileStream API *(Blocking)*</h3>
 <div class="line">);</div>
 <div class="line"> </div>
 <div class="line">Console.WriteLine($<span class="stringliteral">&quot;Waiting for data...&quot;</span>);</div>
-<div class="line"><span class="keywordtype">int</span> bytesRead = server.GetFileStream().Read(buffer, 0, buffer.Length);</div>
+<div class="line"><span class="keywordtype">int</span> bytesRead = server.Read(buffer, 0, buffer.Length);</div>
 <div class="line"> </div>
 <div class="line"><span class="keywordflow">if</span> (bytesRead &gt; 0) {</div>
 <div class="line">    Console.WriteLine($<span class="stringliteral">&quot;Received: `{Encoding.ASCII.GetString(buffer)}`&quot;</span>);</div>
@@ -218,8 +217,8 @@ FileStream API *(Blocking)*</h3>
 <div class="line">    Console.Error.WriteLine(<span class="stringliteral">&quot;Couldn&#39;t read from the mailslot !&quot;</span>);</div>
 <div class="line">    <span class="keywordflow">return</span> 1;</div>
 <div class="line">}</div>
-<div class="ttc" id="aclassMailslotServer_html"><div class="ttname"><a href="classMailslotServer.html">MailslotServer</a></div><div class="ttdoc">Represents a mailslot server and provides all the utilities related to them.</div><div class="ttdef"><b>Definition:</b> MailslotServer.cs:14</div></div>
-<div class="ttc" id="aclassMailslotServer_html_aa8adf694fcaf0b68d0101287249ab6e4"><div class="ttname"><a href="classMailslotServer.html#aa8adf694fcaf0b68d0101287249ab6e4">MailslotServer.MAILSLOT_WAIT_FOREVER</a></div><div class="ttdeci">const uint MAILSLOT_WAIT_FOREVER</div><div class="ttdoc">Waits forever for a message.</div><div class="ttdef"><b>Definition:</b> MailslotServer.cs:32</div></div>
+<div class="ttc" id="aclassMailslotServer_html"><div class="ttname"><a href="classMailslotServer.html">MailslotServer</a></div><div class="ttdoc">Represents a mailslot server and provides all the utilities related to them.</div><div class="ttdef"><b>Definition:</b> MailslotServer.cs:19</div></div>
+<div class="ttc" id="aclassMailslotServer_html_aa8adf694fcaf0b68d0101287249ab6e4"><div class="ttname"><a href="classMailslotServer.html#aa8adf694fcaf0b68d0101287249ab6e4">MailslotServer.MAILSLOT_WAIT_FOREVER</a></div><div class="ttdeci">const uint MAILSLOT_WAIT_FOREVER</div><div class="ttdoc">Waits forever for a message.</div><div class="ttdef"><b>Definition:</b> MailslotServer.cs:37</div></div>
 </div><!-- fragment --><h3><a class="anchor" id="autotoc_md15"></a>
 FileStream API *(Polling)*</h3>
 <div class="fragment"><div class="line"><span class="comment">// TOOD: Create this example</span></div>

@@ -1,15 +1,14 @@
 var classMailslotServer =
 [
-    [ "MailslotServer", "classMailslotServer.html#a0a32a0553cdad96f1b53e487b2c96e69", null ],
-    [ "MailslotServer", "classMailslotServer.html#a614f524e3db8cb764c4b2ed92925054a", null ],
+    [ "MailslotServer", "classMailslotServer.html#a757875f6e02f0f5fd612adb9d41f3ea8", null ],
+    [ "MailslotServer", "classMailslotServer.html#a8de731d6b2851ffe7dd6b354ee5e0fd5", null ],
     [ "CreateAsFileStream", "classMailslotServer.html#a6497630f716e9cce7f7576e81d5b9dd9", null ],
     [ "CreateAsFileStream", "classMailslotServer.html#a2cdf7e9c10345e4316fc6e0ddd30e3ea", null ],
-    [ "Dispose", "classMailslotServer.html#aafe1d504108616c1895cdd5334a20eda", null ],
     [ "ExistsAt", "classMailslotServer.html#ab084b905313b87c39ab049bef059ce49", null ],
     [ "ExistsAt", "classMailslotServer.html#aa123a32592db41c3d457a07761fc0c8f", null ],
-    [ "GetFileStream", "classMailslotServer.html#a1c6ba7a1da72f1b03b75e1870cb9da48", null ],
     [ "GetInfo", "classMailslotServer.html#a3bb68c2cb81517d042355c5c98df21a9", null ],
     [ "SetReadTimeoutMs", "classMailslotServer.html#a6ace30f9d6f637b2bc34c516c2d399a5", null ],
+    [ "MAILSLOT_ANY_MESSAGE_SIZE", "classMailslotServer.html#af133512db94f1fc70d6d259a697e49ca", null ],
     [ "MAILSLOT_NO_MESSAGE", "classMailslotServer.html#a72f5e807367d7f793d5f213d590d71f2", null ],
     [ "MAILSLOT_WAIT_FOREVER", "classMailslotServer.html#aa8adf694fcaf0b68d0101287249ab6e4", null ],
     [ "FullPath", "classMailslotServer.html#a0b1e76d239939e3024150d6e9dfb6c4f", null ],
